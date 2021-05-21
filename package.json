@@ -1,0 +1,17 @@
+{
+  "name": "com.dreambuilders.dreambuilders",
+  "version": "1.0.0",
+  "displayName": "Dream Builders",
+  "description": "Dream Builders library",
+  "keywords": [
+    "keyword1",
+    "keyword2",
+    "keyword3"
+  ],
+  "author": {
+    "name": "Unity",
+    "email": "unity@example.com",
+    "url": "https://www.unity3d.com"
+  },
+  "type": "library"
+}
