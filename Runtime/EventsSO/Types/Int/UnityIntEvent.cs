@@ -1,0 +1,1 @@
+﻿[System.Serializable] public class UnityIntEvent : UnityEngine.Events.UnityEvent<int> { }

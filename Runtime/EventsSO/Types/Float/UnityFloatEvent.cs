@@ -1,0 +1,1 @@
+﻿[System.Serializable] public class UnityFloatEvent : UnityEngine.Events.UnityEvent<float> { }

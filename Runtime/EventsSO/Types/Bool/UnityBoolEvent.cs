@@ -1,0 +1,1 @@
+﻿[System.Serializable] public class UnityBoolEvent : UnityEngine.Events.UnityEvent<bool> { }
