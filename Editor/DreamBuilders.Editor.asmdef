@@ -1,0 +1,16 @@
+{
+    "name": "DreamBuilders.Editor",
+    "rootNamespace": "",
+    "references": [
+        "GUID:8b0e30bac5af9f7489a684d8b9f9913d"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
