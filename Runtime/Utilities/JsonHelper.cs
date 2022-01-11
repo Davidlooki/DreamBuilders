@@ -1,7 +1,7 @@
 ﻿using System;
 using UnityEngine;
 
-namespace AnduraStudio.Utilities
+namespace DreamBuilders.Utilities
 {
     public static class JsonHelper
     {
