@@ -4,14 +4,11 @@
   "displayName": "Dream Builders",
   "description": "Dream Builders library",
   "keywords": [
-    "keyword1",
-    "keyword2",
-    "keyword3"
   ],
   "author": {
-    "name": "Unity",
-    "email": "unity@example.com",
-    "url": "https://www.unity3d.com"
+    "name": "Davidlooki",
+    "email": "davidlooki@hotmail.com",
+    "url": "https://github.com/Davidlooki/DreamBuilders"
   },
   "type": "library"
 }

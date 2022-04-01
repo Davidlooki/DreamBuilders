@@ -1,6 +1,6 @@
 {
     "name": "DreamBuilders.Editor.Tests",
-    "rootNamespace": "",
+    "rootNamespace": "DreamBuilders.Editor.Tests",
     "references": [],
     "includePlatforms": [],
     "excludePlatforms": [],

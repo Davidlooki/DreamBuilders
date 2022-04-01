@@ -1,6 +1,6 @@
 {
     "name": "DreamBuilders",
-    "rootNamespace": "",
+    "rootNamespace": "DreamBuilders",
     "references": [],
     "includePlatforms": [],
     "excludePlatforms": [],
