@@ -1,4 +1,4 @@
 ﻿using UnityEngine;
 
-    [CreateAssetMenu(fileName = "New Float Event", menuName = "DreamBuilders/Game Events/Float Event")]
+    [CreateAssetMenu(fileName = "NewFloatEvent", menuName = "DreamBuilders/Game Events/float Event")]
     public class FloatEvent : BaseGameEvent<float> { }
