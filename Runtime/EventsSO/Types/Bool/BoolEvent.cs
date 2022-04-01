@@ -1,4 +1,4 @@
 ﻿using UnityEngine;
 
-[CreateAssetMenu(fileName = "NewBoolEvent", menuName = "DreamBuilders/Game Events/bool Event")]
+[CreateAssetMenu(fileName = "New Bool Event", menuName = "DreamBuilders/Game Events/Bool Event")]
 public class BoolEvent : BaseGameEvent<bool> { }
