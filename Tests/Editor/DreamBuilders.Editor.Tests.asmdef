@@ -1,14 +1,23 @@
 {
     "name": "DreamBuilders.Editor.Tests",
     "rootNamespace": "DreamBuilders.Editor.Tests",
-    "references": [],
+    "references": [
+        "GUID:18e52bf5428dedf479e98734d8ed6d61",
+        "GUID:87602fc7f647572438d0ad049cea3d4a",
+        "GUID:27619889b8ba8c24980f49ee34dbb44a",
+        "GUID:0acc523941302664db1f4e527237feb3"
+    ],
     "includePlatforms": [],
-    "excludePlatforms": [],
+    "excludePlatforms": [
+        "Editor"
+    ],
     "allowUnsafeCode": false,
     "overrideReferences": false,
     "precompiledReferences": [],
     "autoReferenced": true,
-    "defineConstraints": [],
+    "defineConstraints": [
+        "UNITY_INCLUDE_TESTS"
+    ],
     "versionDefines": [],
     "noEngineReferences": false
 }

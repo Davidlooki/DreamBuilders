@@ -1,14 +1,19 @@
 {
     "name": "DreamBuilders.Tests",
     "rootNamespace": "DreamBuilders.Tests",
-    "references": [],
+    "references": [
+        "GUID:18e52bf5428dedf479e98734d8ed6d61",
+        "GUID:27619889b8ba8c24980f49ee34dbb44a"
+    ],
     "includePlatforms": [],
     "excludePlatforms": [],
     "allowUnsafeCode": false,
     "overrideReferences": false,
     "precompiledReferences": [],
     "autoReferenced": true,
-    "defineConstraints": [],
+    "defineConstraints": [
+        "UNITY_INCLUDE_TESTS"
+    ],
     "versionDefines": [],
     "noEngineReferences": false
 }
