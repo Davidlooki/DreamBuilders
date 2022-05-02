@@ -1,16 +1,21 @@
 using System;
-using System.Linq;
 using System.Collections;
 using System.Collections.Generic;
-
+using System.Linq;
 using UnityEngine;
 
-public abstract class Collection<T> : ScriptableObject, ICollection<T>, IEnumerable<T>, IEnumerable, IList<T>, IReadOnlyCollection<T>, IReadOnlyList<T>, ICollection where T : ScriptableObject, ICollectionEntry
+public abstract class Collection<T> : ScriptableObject, IList<T>, IReadOnlyList<T>,
+                                      ICollection where T : ScriptableObject, ICollectionEntry
 {
     [SerializeField] private int _initialId = 0;
-    public T this[int index] { get => _entries[index]; set => Replace(index, value); }
 
-    [SerializeField] private List<T> _entries = new List<T>();
+    public T this[int index]
+    {
+        get => _entries[index];
+        set => Replace(index, value);
+    }
+
+    [SerializeField] protected List<T> _entries = new();
 
     public int Count => _entries.Count;
     public bool IsReadOnly { get; }
@@ -28,42 +33,33 @@ public abstract class Collection<T> : ScriptableObject, ICollection<T>, IEnumera
     public void RemoveAt(int index) => _entries.RemoveAt(index);
     public void Clear() => _entries.Clear();
 
-    protected virtual void OnAddObject(T t)
-    {
+    // protected virtual void OnAddObject(T t) { }
+    //
+    // protected virtual void OnRemoveObject(T t) { }
+    //
+    // protected virtual void OnCollectionChange() { }
 
-    }
-
-    protected virtual void OnRemoveObject(T t)
-    {
-
-    }
-
-    protected virtual void OnCollectionChange()
-    {
-    }
-
-    
 
     public void CopyTo(Array array, int index)
     {
         if (array == null)
             throw new ArgumentNullException(nameof(array));
 
-        if (!(array is T[] t))
+        if (array is not T[] t)
             throw new ArgumentException();
 
-        ((ICollection<T>)this).CopyTo(t, index);
+        ((ICollection<T>) this).CopyTo(t, index);
     }
 
     public void CopyTo(T[] array, int arrayIndex)
     {
         if (array == null)
-            throw new ArgumentNullException("array");
+            throw new ArgumentNullException(nameof(array));
 
-        if (!(array is T[] t))
+        if (array is not T[] t)
             throw new ArgumentException();
 
-        ((ICollection<T>)this).CopyTo(t, arrayIndex);
+        ((ICollection<T>) this).CopyTo(t, arrayIndex);
     }
 
     public void Swap(int indexA, int indexB)
@@ -103,16 +99,13 @@ public abstract class Collection<T> : ScriptableObject, ICollection<T>, IEnumera
         while (!found)
         {
             found = true;
-            for (int i = 0; i < _entries.Count; i++)
-            {
-                if (_entries[i].Id == freeId)
-                {
-                    found = false;
-                    freeId++;
-                    break;
-                }
-            }
+
+            if (_entries.All(t => t.Id != freeId)) continue;
+
+            found = false;
+            freeId++;
         }
+
         return freeId;
     }
 
@@ -145,7 +138,7 @@ public abstract class Collection<T> : ScriptableObject, ICollection<T>, IEnumera
 
     public IEnumerator<T> GetEnumerator()
     {
-        throw new System.NotImplementedException();
+        throw new NotImplementedException();
     }
 
     IEnumerator IEnumerable.GetEnumerator()
