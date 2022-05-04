@@ -1,6 +1,7 @@
 ﻿using System;
 using IEnumerator = System.Collections.IEnumerator;
 using System.Collections.Generic;
+using System.Linq;
 using UnityAction = UnityEngine.Events.UnityAction;
 using UnityEngine;
 using static System.Byte;
@@ -14,18 +15,15 @@ namespace DreamBuilders
         /// <summary>
         /// Invokes the method <paramref name="method"/> in <paramref name="time"/> seconds.
         /// </summary>
-        public static Coroutine Invoke(this MonoBehaviour mb, UnityAction method, float time)
-        {
-            return mb.StartCoroutine(Invoker(method, time));
-        }
+        public static Coroutine Invoke(this MonoBehaviour mb, UnityAction method, float time) =>
+            mb.StartCoroutine(Invoker(method, time));
 
         /// <summary>
         /// Invokes the method <paramref name="method"/> in <paramref name="time"/> seconds, then repeatedly every <paramref name="repeatRate"/> seconds.
         /// </summary>
-        public static Coroutine InvokeRepeating(this MonoBehaviour mb, UnityAction method, float time, float repeatRate)
-        {
-            return mb.StartCoroutine(Invoker(method, time, repeatRate, true));
-        }
+        public static Coroutine
+            InvokeRepeating(this MonoBehaviour mb, UnityAction method, float time, float repeatRate) =>
+            mb.StartCoroutine(Invoker(method, time, repeatRate, true));
 
         private static IEnumerator Invoker(UnityAction method, float time, float repeatRate = 0, bool repeat = false)
         {
@@ -44,19 +42,15 @@ namespace DreamBuilders
         /// <summary>
         /// Invokes the method <paramref name="method"/> in <paramref name="time"/> seconds using unscaled time.
         /// </summary>
-        public static Coroutine UnscaledInvoke(this MonoBehaviour mb, UnityAction method, float time)
-        {
-            return mb.StartCoroutine(UnscaledInvoker(method, time));
-        }
+        public static Coroutine UnscaledInvoke(this MonoBehaviour mb, UnityAction method, float time) =>
+            mb.StartCoroutine(UnscaledInvoker(method, time));
 
         /// <summary>
         /// Invokes the method <paramref name="method"/> in <paramref name="time"/> seconds, then repeatedly every <paramref name="repeatRate"/> seconds using unscaled time.
         /// </summary>
         public static Coroutine UnscaledInvokeRepeating(this MonoBehaviour mb, UnityAction method, float time,
-                                                        float repeatRate)
-        {
-            return mb.StartCoroutine(UnscaledInvoker(method, time, repeatRate, true));
-        }
+                                                        float repeatRate) =>
+            mb.StartCoroutine(UnscaledInvoker(method, time, repeatRate, true));
 
         private static IEnumerator UnscaledInvoker(UnityAction method, float time, float repeatRate = 0,
                                                    bool repeat = false)
@@ -73,10 +67,8 @@ namespace DreamBuilders
 
         #region Numbers
 
-        public static double Sigmoid(this double input, double coeficient = 1)
-        {
-            return (1 / (1 + System.Math.Exp(-input * coeficient)));
-        }
+        public static double Sigmoid(this double input, double coeficient = 1) =>
+            (1 / (1 + System.Math.Exp(-input * coeficient)));
 
         #endregion
 
@@ -94,24 +86,12 @@ namespace DreamBuilders
             return new string(array);
         }
 
-        public static int WordCount(this string str)
-        {
-            return str.Split(new char[] {' ', '.', '?'},
-                             StringSplitOptions.RemoveEmptyEntries).Length;
-        }
+        public static int WordCount(this string str) =>
+            str.Split(new char[] {' ', '.', '?'}, StringSplitOptions.RemoveEmptyEntries).Length;
 
-        public static bool IsValidString(this string str, char[] prohibitedChars, short maxChar = 0)
-        {
-            if (maxChar > 0 && str.Length > maxChar || string.IsNullOrEmpty(str))
-                return false;
-
-            foreach (char inputChar in str)
-            foreach (char prohibitedChar in prohibitedChars)
-                if (inputChar == prohibitedChar)
-                    return false;
-
-            return true;
-        }
+        public static bool IsValidString(this string str, char[] prohibitedChars, short maxChar = 0) =>
+            (maxChar <= 0 || str.Length <= maxChar) && !string.IsNullOrEmpty(str) &&
+            str.All(inputChar => prohibitedChars.All(prohibitedChar => inputChar != prohibitedChar));
 
         public static int ToInt(this string str)
         {
@@ -141,10 +121,9 @@ namespace DreamBuilders
 
             Type t = typeof(T);
 
-            if (!t.IsEnum)
-                throw new ArgumentException("Type provided must be an Enum.", "T");
-
-            return (T) Enum.Parse(t, str, ignorecase);
+            return !t.IsEnum
+                ? throw new ArgumentException("Type provided must be an Enum.", "T")
+                : (T) Enum.Parse(t, str, ignorecase);
         }
 
         #endregion
@@ -155,8 +134,8 @@ namespace DreamBuilders
 
         #region Bools
 
-        public static bool IsOneOf<T>(this T item, params T[] options)
-            => Array.Exists(options, x => x.Equals(item));
+        public static bool IsOneOf<T>(this T item, params T[] options) =>
+            Array.Exists(options, x => x.Equals(item));
 
         #endregion
 
@@ -181,21 +160,22 @@ namespace DreamBuilders
         /// <param name="list"></param>
         public static void Shuffle<T>(this IList<T> list)
         {
-            System.Security.Cryptography.RNGCryptoServiceProvider provider =
-                new System.Security.Cryptography.RNGCryptoServiceProvider();
+            System.Security.Cryptography.RNGCryptoServiceProvider provider = new();
+
             int n = list.Count;
             while (n > 1)
             {
                 byte[] box = new byte[1];
-                do
-                    provider.GetBytes(box);
+
+                do provider.GetBytes(box);
                 while (!(box[0] < n * (MaxValue / n)));
+
                 int k = (box[0] % n);
                 n--;
                 (list[k], list[n]) = (list[n], list[k]);
             }
         }
-        
+
         /// <summary>
         /// Removes a random item from the list, returning that item.
         /// Sampling without replacement.
@@ -216,19 +196,28 @@ namespace DreamBuilders
         #region Vectors
 
         public static Vector2 Random(this Vector2 vector, float maxRange, float minRange) =>
-            new Vector2(UnityEngine.Random.Range(minRange, maxRange),
-                        UnityEngine.Random.Range(minRange, maxRange));
+            new(UnityEngine.Random.Range(minRange, maxRange),
+                UnityEngine.Random.Range(minRange, maxRange));
 
         public static Vector3 Random(this Vector3 vector, float maxRange, float minRange) =>
-            new Vector3(UnityEngine.Random.Range(minRange, maxRange),
-                        UnityEngine.Random.Range(minRange, maxRange),
-                        UnityEngine.Random.Range(minRange, maxRange));
+            new(UnityEngine.Random.Range(minRange, maxRange),
+                UnityEngine.Random.Range(minRange, maxRange),
+                UnityEngine.Random.Range(minRange, maxRange));
 
         public static Vector4 Random(this Vector4 vector, float maxRange, float minRange) =>
-            new Vector4(UnityEngine.Random.Range(minRange, maxRange),
-                        UnityEngine.Random.Range(minRange, maxRange),
-                        UnityEngine.Random.Range(minRange, maxRange),
-                        UnityEngine.Random.Range(minRange, maxRange));
+            new(UnityEngine.Random.Range(minRange, maxRange),
+                UnityEngine.Random.Range(minRange, maxRange),
+                UnityEngine.Random.Range(minRange, maxRange),
+                UnityEngine.Random.Range(minRange, maxRange));
+
+        #endregion
+
+        #region AI
+
+        public static bool HasArrived(this UnityEngine.AI.NavMeshAgent navMeshAgent, float tolerance = 0.01f) =>
+            !navMeshAgent.pathPending && (navMeshAgent.remainingDistance <= navMeshAgent.stoppingDistance &&
+                                          (!navMeshAgent.hasPath ||
+                                           navMeshAgent.velocity.sqrMagnitude < tolerance));
 
         #endregion
     }
