@@ -3,7 +3,9 @@ using UnityEngine;
 public class MathX
 {
     #region Methods
+
     #region Hermite
+
     /// <summary>
     ///  Interpolate while easing in and out at the limits.
     /// </summary>
@@ -11,10 +13,8 @@ public class MathX
     /// <param name="end"></param>
     /// <param name="value"></param>
     /// <returns></returns>
-    public static float Hermite(float start, float end, float value)
-    {
-        return Mathf.Lerp(start, end, value * value * (3.0f - 2.0f * value));
-    }
+    public static float Hermite(float start, float end, float value) =>
+        Mathf.Lerp(start, end, value * value * (3.0f - 2.0f * value));
 
     /// <summary>
     /// Interpolate while easing in and out at the limits.
@@ -23,10 +23,8 @@ public class MathX
     /// <param name="end"></param>
     /// <param name="value"></param>
     /// <returns></returns>
-    public static Vector2 Hermite(Vector2 start, Vector2 end, float value)
-    {
-        return new Vector2(Hermite(start.x, end.x, value), Hermite(start.y, end.y, value));
-    }
+    public static Vector2 Hermite(Vector2 start, Vector2 end, float value) =>
+        new Vector2(Hermite(start.x, end.x, value), Hermite(start.y, end.y, value));
 
     /// <summary>
     /// Interpolate while easing in and out at the limits.
@@ -35,24 +33,12 @@ public class MathX
     /// <param name="end"></param>
     /// <param name="value"></param>
     /// <returns></returns>
-    public static Vector3 Hermite(Vector3 start, Vector3 end, float value)
-    {
-        return new Vector3(Hermite(start.x, end.x, value), Hermite(start.y, end.y, value), Hermite(start.z, end.z, value));
-    }
+    public static Vector3 Hermite(Vector3 start, Vector3 end, float value) =>
+        new Vector3(Hermite(start.x, end.x, value), Hermite(start.y, end.y, value), Hermite(start.z, end.z, value));
+
     #endregion
 
     #region Sinerp
-    /// <summary>
-    /// Sinusoidal interpolation while easing around the end, when value is near one.
-    /// </summary>
-    /// <param name="start"></param>
-    /// <param name="end"></param>
-    /// <param name="value"></param>
-    /// <returns></returns>
-    public static float Sinerp(float start, float end, float value)
-    {
-        return Mathf.Lerp(start, end, Mathf.Sin(value * Mathf.PI * 0.5f));
-    }
 
     /// <summary>
     /// Sinusoidal interpolation while easing around the end, when value is near one.
@@ -61,10 +47,19 @@ public class MathX
     /// <param name="end"></param>
     /// <param name="value"></param>
     /// <returns></returns>
-    public static Vector2 Sinerp(Vector2 start, Vector2 end, float value)
-    {
-        return new Vector2(Mathf.Lerp(start.x, end.x, Mathf.Sin(value * Mathf.PI * 0.5f)), Mathf.Lerp(start.y, end.y, Mathf.Sin(value * Mathf.PI * 0.5f)));
-    }
+    public static float Sinerp(float start, float end, float value) =>
+        Mathf.Lerp(start, end, Mathf.Sin(value * Mathf.PI * 0.5f));
+
+    /// <summary>
+    /// Sinusoidal interpolation while easing around the end, when value is near one.
+    /// </summary>
+    /// <param name="start"></param>
+    /// <param name="end"></param>
+    /// <param name="value"></param>
+    /// <returns></returns>
+    public static Vector2 Sinerp(Vector2 start, Vector2 end, float value) =>
+        new Vector2(Mathf.Lerp(start.x, end.x, Mathf.Sin(value * Mathf.PI * 0.5f)),
+                    Mathf.Lerp(start.y, end.y, Mathf.Sin(value * Mathf.PI * 0.5f)));
 
     /// <summary>
     /// Sinusoidal interpolation easing out when value is near one.
@@ -73,13 +68,15 @@ public class MathX
     /// <param name="end"></param>
     /// <param name="value"></param>
     /// <returns></returns>
-    public static Vector3 Sinerp(Vector3 start, Vector3 end, float value)
-    {
-        return new Vector3(Mathf.Lerp(start.x, end.x, Mathf.Sin(value * Mathf.PI * 0.5f)), Mathf.Lerp(start.y, end.y, Mathf.Sin(value * Mathf.PI * 0.5f)), Mathf.Lerp(start.z, end.z, Mathf.Sin(value * Mathf.PI * 0.5f)));
-    }
+    public static Vector3 Sinerp(Vector3 start, Vector3 end, float value) =>
+        new(Mathf.Lerp(start.x, end.x, Mathf.Sin(value * Mathf.PI * 0.5f)),
+            Mathf.Lerp(start.y, end.y, Mathf.Sin(value * Mathf.PI * 0.5f)),
+            Mathf.Lerp(start.z, end.z, Mathf.Sin(value * Mathf.PI * 0.5f)));
+
     #endregion
 
     #region Coserp
+
     //Ease in
     /// <summary>
     /// Cosenoidal interpolation easing in when value is near zero.
@@ -88,10 +85,8 @@ public class MathX
     /// <param name="end"></param>
     /// <param name="value"></param>
     /// <returns></returns>
-    public static float Coserp(float start, float end, float value)
-    {
-        return Mathf.Lerp(start, end, 1.0f - Mathf.Cos(value * Mathf.PI * 0.5f));
-    }
+    public static float Coserp(float start, float end, float value) => 
+        Mathf.Lerp(start, end, 1.0f - Mathf.Cos(value * Mathf.PI * 0.5f));
 
     /// <summary>
     /// Cosenoidal interpolation easing in when value is near zero.
@@ -100,10 +95,8 @@ public class MathX
     /// <param name="end"></param>
     /// <param name="value"></param>
     /// <returns></returns>
-    public static Vector2 Coserp(Vector2 start, Vector2 end, float value)
-    {
-        return new Vector2(Coserp(start.x, end.x, value), Coserp(start.y, end.y, value));
-    }
+    public static Vector2 Coserp(Vector2 start, Vector2 end, float value) => 
+        new(Coserp(start.x, end.x, value), Coserp(start.y, end.y, value));
 
     /// <summary>
     /// Cosenoidal interpolation easing in when value is near zero.
@@ -112,13 +105,13 @@ public class MathX
     /// <param name="end"></param>
     /// <param name="value"></param>
     /// <returns></returns>
-    public static Vector3 Coserp(Vector3 start, Vector3 end, float value)
-    {
-        return new Vector3(Coserp(start.x, end.x, value), Coserp(start.y, end.y, value), Coserp(start.z, end.z, value));
-    }
+    public static Vector3 Coserp(Vector3 start, Vector3 end, float value) => 
+        new(Coserp(start.x, end.x, value), Coserp(start.y, end.y, value), Coserp(start.z, end.z, value));
+
     #endregion
 
     #region Berp
+
     /// <summary>
     /// Boing-like interpolation overshoot, then waver back and forth around the end value before coming to a rest.
     /// </summary>
@@ -129,7 +122,8 @@ public class MathX
     public static float Berp(float start, float end, float value)
     {
         value = Mathf.Clamp01(value);
-        value = (Mathf.Sin(value * Mathf.PI * (0.2f + 2.5f * value * value * value)) * Mathf.Pow(1f - value, 2.2f) + value) * (1f + (1.2f * (1f - value)));
+        value = (Mathf.Sin(value * Mathf.PI * (0.2f + 2.5f * value * value * value)) * Mathf.Pow(1f - value, 2.2f) +
+                 value) * (1f + (1.2f * (1f - value)));
         return start + (end - start) * value;
     }
 
@@ -156,9 +150,11 @@ public class MathX
     {
         return new Vector3(Berp(start.x, end.x, value), Berp(start.y, end.y, value), Berp(start.z, end.z, value));
     }
+
     #endregion
 
     #region SmoothStep
+
     /// <summary>
     /// Like Lerp, but has ease-in and ease-out of the values.
     /// </summary>
@@ -197,9 +193,11 @@ public class MathX
     {
         return new Vector3(SmoothStep(vec.x, min, max), SmoothStep(vec.y, min, max), SmoothStep(vec.z, min, max));
     }
+
     #endregion
 
     #region NearestPoint
+
     /// <summary>
     /// Returns the nearest point on a line to a point.
     /// </summary>
@@ -229,9 +227,11 @@ public class MathX
         float closestPoint = Vector3.Dot((point - lineStart), lineDirection);
         return lineStart + (closestPoint * lineDirection);
     }
+
     #endregion
 
     #region NearestPointStrict
+
     /// <summary>
     /// Works like NearestPoint except the end of the line is clamped.
     /// </summary>
@@ -261,9 +261,11 @@ public class MathX
         float closestPoint = Vector3.Dot((point - lineStart), lineDirection);
         return lineStart + (Mathf.Clamp(closestPoint, 0.0f, Vector3.Magnitude(fullDirection)) * lineDirection);
     }
+
     #endregion
 
     #region Bounce
+
     /// <summary>
     /// Returns a value between 0 and 1 that can be used to easily make bouncing.
     /// </summary>
@@ -293,9 +295,11 @@ public class MathX
     {
         return new Vector3(Bounce(vec.x), Bounce(vec.y), Bounce(vec.z));
     }
+
     #endregion
 
     #region Approx
+
     /// <summary>
     /// Test for value that is near specified float (due to floating point inprecision)
     /// </summary>
@@ -319,9 +323,11 @@ public class MathX
     {
         return ((val - about).sqrMagnitude < range * range);
     }
+
     #endregion
 
     #region Clerp
+
     /// <summary>
     /// Circular Lerp is Like lerp but handles the wraparound from 0 to 360.
     /// </summary>
@@ -334,7 +340,7 @@ public class MathX
     {
         float min = 0.0f;
         float max = 360.0f;
-        float half = Mathf.Abs((max - min) / 2.0f);//half the distance between min and max
+        float half = Mathf.Abs((max - min) / 2.0f); //half the distance between min and max
         float retval = 0.0f;
         float diff = 0.0f;
 
@@ -353,6 +359,8 @@ public class MathX
 
         return retval;
     }
+
     #endregion
+
     #endregion
 }
