@@ -2,7 +2,7 @@ public interface ITageable
 {
     #region Fields
 
-    System.Collections.Generic.List<string> Tags { get; set; }
+    System.Collections.Generic.List<string> Tags { get; }
 
     #endregion
 

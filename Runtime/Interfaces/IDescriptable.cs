@@ -2,7 +2,7 @@
 {
     #region Fields
 
-    string Description { get; set; }
+    string Description { get; }
 
     #endregion
 

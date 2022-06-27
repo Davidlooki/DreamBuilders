@@ -2,7 +2,7 @@
 {
     #region Fields
 
-    int Id { get; set; }
+    int Id { get; }
 
     #endregion
 
