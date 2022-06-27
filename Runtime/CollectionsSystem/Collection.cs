@@ -62,12 +62,14 @@ public abstract class Collection<T> : ScriptableObject, IList<T>, IReadOnlyList<
         ((ICollection<T>) this).CopyTo(t, arrayIndex);
     }
 
-    public void Swap(int indexA, int indexB)
-    {
-        T a = _entries[indexA];
-        Replace(indexA, _entries[indexB]);
-        Replace(indexB, a);
-    }
+    public void Swap(int indexA, int indexB) =>
+        (_entries[indexA], _entries[indexB]) = (_entries[indexB], _entries[indexA]);
+    // {
+    //     // T a = _entries[indexA];
+    //     // Replace(indexA, _entries[indexB]);
+    //     // Replace(indexB, a);
+    //     
+    // }
 
     public bool TryGetById(int id, out T t)
     {
@@ -79,10 +81,10 @@ public abstract class Collection<T> : ScriptableObject, IList<T>, IReadOnlyList<
         return default;
     }
 
-    public bool TryGetByName(string name, out T t)
+    public bool TryGetByName(string elementName, out T t)
     {
         for (int i = 0; i < _entries.Count; i++)
-            if (TryGetAtIndex(i, out t) && t.Name == name)
+            if (TryGetAtIndex(i, out t) && t.Name == elementName)
                 return true;
 
         t = default;
@@ -122,7 +124,7 @@ public abstract class Collection<T> : ScriptableObject, IList<T>, IReadOnlyList<
         return maxId + 1;
     }
 
-    public bool ContainsDuplicateId()
+    public bool ContainsDuplicateId(out int duplicatedId, out int duplicatedIndex)
     {
         for (int i = 0; i < _entries.Count - 1; i++)
         {
@@ -130,9 +132,14 @@ public abstract class Collection<T> : ScriptableObject, IList<T>, IReadOnlyList<
 
             for (int j = i + 1; j < _entries.Count; j++)
                 if (asset1.Id == _entries[j].Id)
+                {
+                    duplicatedIndex = j;
+                    duplicatedId = asset1.Id;
                     return true;
+                }
         }
 
+        duplicatedIndex = duplicatedId = -1;
         return false;
     }
 
