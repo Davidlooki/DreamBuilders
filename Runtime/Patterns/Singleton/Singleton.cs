@@ -5,6 +5,8 @@ namespace DreamBuilders
     [DisallowMultipleComponent]
     public abstract class Singleton<T> : MonoBehaviour where T : Component
     {
+        #region Fields
+
         [SerializeField] protected bool _dontDestroyOnLoad = true;
 
         private static T _instance;
@@ -24,6 +26,10 @@ namespace DreamBuilders
             }
         }
 
+        #endregion
+
+        #region Unity Methods
+
         protected virtual void Awake()
         {
             if (_instance == null)
@@ -40,5 +46,7 @@ namespace DreamBuilders
         }
 
         protected virtual void OnDestroy() => _instance = null;
+
+        #endregion
     }
 }
