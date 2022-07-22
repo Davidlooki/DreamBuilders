@@ -1,7 +1,9 @@
-﻿namespace DreamBuilders
+﻿using System;
+
+namespace DreamBuilders
 {
     [System.Serializable]
-    public struct WebRequestResult<T>
+    public struct WebRequestResult<T> : IDisposable
     {
         #region Fields
 
@@ -19,6 +21,10 @@
 
         public WebRequestResult(T result, string error) : this(result) => (Error, Succeeded) = (error, false);
 
+        public void Dispose()
+        {
+        }
         #endregion
+
     }
 }
