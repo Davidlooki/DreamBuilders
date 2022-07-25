@@ -1,46 +1,41 @@
 namespace DreamBuilders
 {
-    public abstract class StateMachine : UnityEngine.MonoBehaviour
+    public abstract class StateMachine : UnityEngine.MonoBehaviour, IStateContext
     {
         #region Fields
 
-        protected IState _previousState;
-
-        protected IState _currentState;
-
-        public IState CurrentState
-        {
-            get => _currentState;
-            set
-            {
-                if (value == null || _currentState == value) return;
-
-                _currentState?.Exit();
-
-                _previousState = _currentState;
-                _currentState = value;
-
-                _currentState?.Enter();
-            }
-        }
+        public IState PreviousState { get; protected set; }
+        public IState CurrentState { get; protected set; }
 
         #endregion
 
         #region Unity Methods
 
-        private void FixedUpdate() => _currentState?.FixedTick();
+        private void FixedUpdate() => CurrentState?.FixedTick();
 
-        private void Update() => _currentState?.Tick();
+        private void Update() => CurrentState?.Tick();
 
         #endregion
 
         #region Methods
 
+        public void SetState(IState state)
+        {
+            if (state == null || CurrentState == state) return;
+
+            CurrentState?.Exit();
+
+            PreviousState = CurrentState;
+            CurrentState = state;
+
+            CurrentState?.Enter();
+        }
+
         public void RevertState()
         {
-            if (_previousState == null) return;
+            if (PreviousState == null) return;
 
-            CurrentState = _previousState;
+            CurrentState = PreviousState;
         }
 
         #endregion
