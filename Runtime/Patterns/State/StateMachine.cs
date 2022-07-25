@@ -11,9 +11,9 @@ namespace DreamBuilders
 
         #region Unity Methods
 
-        private void FixedUpdate() => CurrentState?.FixedTick();
+        private void FixedUpdate() => CurrentState?.FixedTick(this);
 
-        private void Update() => CurrentState?.Tick();
+        private void Update() => CurrentState?.Tick(this);
 
         #endregion
 
@@ -23,12 +23,12 @@ namespace DreamBuilders
         {
             if (state == null || CurrentState == state) return;
 
-            CurrentState?.Exit();
+            CurrentState?.Exit(this);
 
             PreviousState = CurrentState;
             CurrentState = state;
 
-            CurrentState?.Enter();
+            CurrentState?.Enter(this);
         }
 
         public void RevertState()
