@@ -3,15 +3,15 @@ namespace DreamBuilders
     public interface IState
     {
         //Automaticly called in State Machine. Allows delay flow if desired.
-        void Enter();
+        public void Enter(IStateContext context);
 
         //Allows simulation of Update without MonoBehaviour attached.
-        void Tick();
+        public void Tick(IStateContext context);
 
         //Allows simulation of FixedUpdate without MonoBehaviour attached.
-        void FixedTick();
-        
+        public void FixedTick(IStateContext context);
+
         //Automaticly called in State Machine. Allows delay flow if desired.
-        void Exit();
+        public void Exit(IStateContext context);
     }
 }
