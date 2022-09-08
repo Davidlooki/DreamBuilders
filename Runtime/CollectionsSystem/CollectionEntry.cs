@@ -20,7 +20,7 @@ public abstract class CollectionEntry : ScriptableObject, ICollectionEntry
     #region Unity Methods
 
 #if UNITY_EDITOR
-    private void OnValidate()
+    protected virtual void OnValidate()
     {
         if (string.IsNullOrEmpty(Name))
             Name = name;
