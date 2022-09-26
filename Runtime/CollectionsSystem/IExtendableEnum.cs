@@ -1,1 +1,4 @@
-public interface IExtendableEnum : ICollectionEntry { }
+namespace DreamBuilders
+{
+    public interface IExtendableEnum : ICollectionEntry { }
+}

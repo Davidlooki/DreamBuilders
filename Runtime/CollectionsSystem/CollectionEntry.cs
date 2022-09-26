@@ -1,35 +1,54 @@
-using System;
-using List = System.Collections.Generic.List<string>;
 using UnityEngine;
 
-public abstract class CollectionEntry : ScriptableObject, ICollectionEntry
+namespace DreamBuilders
 {
-    #region Fields
+    public abstract class CollectionEntry : ScriptableObject, ICollectionEntry
+    {
+        #region Fields
 
-    [field: SerializeField] public Sprite Icon { get; set; } = null;
-    [field: SerializeField] public int Id { get; set; } = 0;
-    [field: SerializeField] public string Name { get; set; } = string.Empty;
-
-    [field: SerializeField, TextArea(10, int.MaxValue)]
-    public string Description { get; set; } = string.Empty;
-
-    [field: SerializeField] public List Tags { get; set; } = new List();
-
-    #endregion
-
-    #region Unity Methods
+        [field: SerializeField] public Sprite Icon { get; protected set; } = null;
 
 #if UNITY_EDITOR
-    protected virtual void OnValidate()
-    {
-        if (string.IsNullOrEmpty(Name))
-            Name = name;
-    }
+        [SerializeField, OnValueChanged(nameof(GenerateId))]
+        protected bool _notRandomId = true;
+
+        [field: ShowIfAttribute(nameof(_notRandomId))]
+#endif
+        [field: SerializeField]
+        public int Id { get; protected set; } = 0;
+
+#if UNITY_EDITOR
+        [field: OnValueChanged(nameof(OnNameChanged))]
+#endif
+        [field: SerializeField]
+        public string Name { get; protected set; } = string.Empty;
+
+        [field: SerializeField, TextArea(5, int.MaxValue)]
+        public string Description { get; protected set; } = string.Empty;
+
+        [field: SerializeField] public GameplayTag[] Tags { get; protected set; }
+
+        #endregion
+
+        #region Unity Methods
+
+#if UNITY_EDITOR
+        protected virtual void OnValidate() => OnNameChanged();
 #endif
 
-    #endregion
+        #endregion
 
-    #region Custom Methods
+        #region Custom Methods
 
-    #endregion
+#if UNITY_EDITOR
+        protected void GenerateId() => Id = new System.Random(Name.GetHashCode()).Next();
+        protected void OnNameChanged()
+        {
+            if (string.IsNullOrEmpty(Name)) Name = name;
+            if (!_notRandomId) GenerateId();
+        }
+#endif
+
+        #endregion
+    }
 }

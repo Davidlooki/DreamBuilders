@@ -1,12 +1,15 @@
-public interface ICollectionEntry : IIdentity, INameable, IDescriptable
+namespace DreamBuilders
 {
-    #region Fields
+    public interface ICollectionEntry : IIdentity, INameable, IDescriptable
+    {
+        #region Fields
 
-    public UnityEngine.Sprite Icon { get; }
+        public UnityEngine.Sprite Icon { get; }
 
-    #endregion
+        #endregion
 
-    #region Custom Methods
+        #region Custom Methods
 
-    #endregion
+        #endregion
+    }
 }

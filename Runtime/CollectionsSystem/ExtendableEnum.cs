@@ -1,11 +1,17 @@
-public abstract class ExtendableEnum : CollectionEntry
+namespace DreamBuilders
 {
-    #region Fields
-    #endregion
+    public abstract class ExtendableEnum : CollectionEntry
+    {
+        #region Fields
 
-    #region Unity Methods
-    #endregion
+        #endregion
 
-    #region Custom Methods
-    #endregion
+        #region Unity Methods
+
+        #endregion
+
+        #region Custom Methods
+
+        #endregion
+    }
 }
