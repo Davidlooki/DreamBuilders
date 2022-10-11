@@ -22,7 +22,7 @@ namespace DreamBuilders
         [SerializeField] protected List<T> _entries = new();
 
         public int Count => _entries.Count;
-        public bool IsReadOnly { get; }
+        public bool IsReadOnly => false;
         public bool IsSynchronized { get; }
         public object SyncRoot { get; }
         public bool IsFixedSize { get; }
@@ -69,16 +69,18 @@ namespace DreamBuilders
             ((ICollection<T>)this).CopyTo(t, index);
         }
 
-        public void CopyTo(T[] array, int arrayIndex)
-        {
-            if (array == null)
-                throw new ArgumentNullException(nameof(array));
+        // public void CopyTo(T[] array, int arrayIndex)
+        // {
+        //     if (array == null)
+        //         throw new ArgumentNullException(nameof(array));
+        //
+        //     if (array is not T[] t)
+        //         throw new ArgumentException();
+        //
+        //     ((ICollection<T>)this).CopyTo(t, arrayIndex);
+        // }
 
-            if (array is not T[] t)
-                throw new ArgumentException();
-
-            ((ICollection<T>)this).CopyTo(t, arrayIndex);
-        }
+        public void CopyTo(T[] array, int arrayIndex) => _entries.CopyTo(array, arrayIndex);
 
         public void Swap(int indexA, int indexB) =>
             (_entries[indexA], _entries[indexB]) = (_entries[indexB], _entries[indexA]);
@@ -146,11 +148,11 @@ namespace DreamBuilders
 
         public bool ContainsDuplicateId(out int duplicatedId, out Tuple<int, int> duplicatedIndexPair)
         {
-            for (int i = 0; i < _entries.Count - 1; i++)
+            for (var i = 0; i < _entries.Count - 1; i++)
             {
                 T asset1 = _entries[i];
 
-                for (int j = i + 1; j < _entries.Count; j++)
+                for (var j = i + 1; j < _entries.Count; j++)
                     if (asset1.Id == _entries[j].Id)
                     {
                         duplicatedIndexPair = new Tuple<int, int>(i, j);
@@ -166,15 +168,9 @@ namespace DreamBuilders
             return false;
         }
 
-        public IEnumerator<T> GetEnumerator()
-        {
-            throw new NotImplementedException();
-        }
+        public IEnumerator<T> GetEnumerator() => _entries.GetEnumerator();
 
-        IEnumerator IEnumerable.GetEnumerator()
-        {
-            throw new NotImplementedException();
-        }
+        IEnumerator IEnumerable.GetEnumerator() => _entries.GetEnumerator();
 
         #endregion
     }
