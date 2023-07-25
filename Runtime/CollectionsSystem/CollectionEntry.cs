@@ -8,7 +8,6 @@ namespace DreamBuilders
         #region Fields
 
         [field: SerializeField] public Sprite Icon { get; protected set; } = null;
-        [field: SerializeField] public AssetReferenceSprite AddressableIcon = null;
 
 #if UNITY_EDITOR
         [SerializeField, OnValueChanged(nameof(GenerateId))]
