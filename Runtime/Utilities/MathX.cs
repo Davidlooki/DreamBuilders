@@ -59,7 +59,7 @@ public class MathX
     /// <returns></returns>
     public static Vector2 Sinerp(Vector2 start, Vector2 end, float value) =>
         new Vector2(Mathf.Lerp(start.x, end.x, Mathf.Sin(value * Mathf.PI * 0.5f)),
-                    Mathf.Lerp(start.y, end.y, Mathf.Sin(value * Mathf.PI * 0.5f)));
+            Mathf.Lerp(start.y, end.y, Mathf.Sin(value * Mathf.PI * 0.5f)));
 
     /// <summary>
     /// Sinusoidal interpolation easing out when value is near one.
@@ -85,7 +85,7 @@ public class MathX
     /// <param name="end"></param>
     /// <param name="value"></param>
     /// <returns></returns>
-    public static float Coserp(float start, float end, float value) => 
+    public static float Coserp(float start, float end, float value) =>
         Mathf.Lerp(start, end, 1.0f - Mathf.Cos(value * Mathf.PI * 0.5f));
 
     /// <summary>
@@ -95,7 +95,7 @@ public class MathX
     /// <param name="end"></param>
     /// <param name="value"></param>
     /// <returns></returns>
-    public static Vector2 Coserp(Vector2 start, Vector2 end, float value) => 
+    public static Vector2 Coserp(Vector2 start, Vector2 end, float value) =>
         new(Coserp(start.x, end.x, value), Coserp(start.y, end.y, value));
 
     /// <summary>
@@ -105,7 +105,7 @@ public class MathX
     /// <param name="end"></param>
     /// <param name="value"></param>
     /// <returns></returns>
-    public static Vector3 Coserp(Vector3 start, Vector3 end, float value) => 
+    public static Vector3 Coserp(Vector3 start, Vector3 end, float value) =>
         new(Coserp(start.x, end.x, value), Coserp(start.y, end.y, value), Coserp(start.z, end.z, value));
 
     #endregion
@@ -124,6 +124,7 @@ public class MathX
         value = Mathf.Clamp01(value);
         value = (Mathf.Sin(value * Mathf.PI * (0.2f + 2.5f * value * value * value)) * Mathf.Pow(1f - value, 2.2f) +
                  value) * (1f + (1.2f * (1f - value)));
+
         return start + (end - start) * value;
     }
 
@@ -167,6 +168,7 @@ public class MathX
         x = Mathf.Clamp(x, min, max);
         float v1 = (x - min) / (max - min);
         float v2 = (x - min) / (max - min);
+
         return -2 * v1 * v1 * v1 + 3 * v2 * v2;
     }
 
@@ -210,6 +212,7 @@ public class MathX
     {
         Vector2 lineDirection = (lineEnd - lineStart).normalized;
         float closestPoint = Vector2.Dot((point - lineStart), lineDirection);
+
         return lineStart + (closestPoint * lineDirection);
     }
 
@@ -225,6 +228,7 @@ public class MathX
     {
         Vector3 lineDirection = Vector3.Normalize(lineEnd - lineStart);
         float closestPoint = Vector3.Dot((point - lineStart), lineDirection);
+
         return lineStart + (closestPoint * lineDirection);
     }
 
@@ -244,6 +248,7 @@ public class MathX
         Vector2 fullDirection = lineEnd - lineStart;
         Vector2 lineDirection = fullDirection.normalized;
         float closestPoint = Vector2.Dot((point - lineStart), lineDirection);
+
         return lineStart + (Mathf.Clamp(closestPoint, 0.0f, fullDirection.magnitude) * lineDirection);
     }
 
@@ -259,6 +264,7 @@ public class MathX
         Vector3 fullDirection = lineEnd - lineStart;
         Vector3 lineDirection = Vector3.Normalize(fullDirection);
         float closestPoint = Vector3.Dot((point - lineStart), lineDirection);
+
         return lineStart + (Mathf.Clamp(closestPoint, 0.0f, Vector3.Magnitude(fullDirection)) * lineDirection);
     }
 
@@ -301,28 +307,24 @@ public class MathX
     #region Approx
 
     /// <summary>
-    /// Test for value that is near specified float (due to floating point inprecision)
+    /// Test for value that is near specified float (due to floating point inprecision).
     /// </summary>
-    /// <param name="val"></param>
-    /// <param name="about"></param>
-    /// <param name="range"></param>
+    /// <param name="point1"></param>
+    /// <param name="point2"></param>
     /// <returns></returns>
-    public static bool Approx(float val, float about, float range)
-    {
-        return ((Mathf.Abs(val - about) < range));
-    }
+    public static bool Approx(float point1, float point2) => Mathf.Approximately(point1, point2);
 
     /// <summary>
-    /// Test if a Vector3 is close to another Vector3 (due to floating point inprecision). Compares the square of the distance to the square of the range as this avoids calculating a square root which is much slower than squaring the range.
+    /// Test if a Vector3 is close to another Vector3 (due to floating point inprecision).
+    /// Compares the square of the distance to the square of the range as this avoids calculating a square root which is
+    /// much slower than squaring the range.
     /// </summary>
     /// <param name="val"></param>
     /// <param name="about"></param>
     /// <param name="range"></param>
     /// <returns></returns>
-    public static bool Approx(Vector3 val, Vector3 about, float range)
-    {
-        return ((val - about).sqrMagnitude < range * range);
-    }
+    public static bool Approx(Vector3 val, Vector3 about, float range) =>
+        (val - about).sqrMagnitude < range * range;
 
     #endregion
 
@@ -359,6 +361,13 @@ public class MathX
 
         return retval;
     }
+
+    #endregion
+
+    #region Etc
+
+    public static double Sigmoid(double input, double coeficient = 1) =>
+        (1 / (1 + System.Math.Exp(-input * coeficient)));
 
     #endregion
 
