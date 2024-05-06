@@ -4,14 +4,9 @@ namespace DreamBuilders
 {
     public static class EnumeratorExtensions
     {
-        /// <summary>
-        /// Converts an IEnumerator<T> to an IEnumerable<T>.
-        /// </summary>
-        /// <param name="e">An instance of IEnumerator<T>.</param>
-        /// <returns>An IEnumerable<T> with the same elements as the input instance.</returns>    
-        public static IEnumerable<T> ToEnumerable<T>(this IEnumerator<T> e)
+        public static IEnumerable<T> ToEnumerable<T>(this IEnumerator<T> sequence)
         {
-            while (e.MoveNext()) { yield return e.Current; }
+            while (sequence.MoveNext()) { yield return sequence.Current; }
         }
     }
 }
