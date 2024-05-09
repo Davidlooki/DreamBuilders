@@ -7,16 +7,6 @@ namespace DreamBuilders.Editor
     [CustomPropertyDrawer(typeof(EnumFlagsAttribute))]
     public class EnumFlagsPropertyDrawer : PropertyDrawerBase
     {
-        #region Fields
-
-        #endregion
-
-        #region Constructors
-
-        #endregion
-
-        #region Methods
-
         protected override float GetPropertyHeight_Internal(SerializedProperty property, GUIContent label) =>
             PropertyUtility.GetTargetObjectOfProperty(property) is Enum
                 ? GetPropertyHeight(property)
@@ -39,7 +29,5 @@ namespace DreamBuilders.Editor
 
             EditorGUI.EndProperty();
         }
-
-        #endregion
     }
 }

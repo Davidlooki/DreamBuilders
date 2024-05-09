@@ -5,17 +5,7 @@ namespace DreamBuilders
 {
     public class DropdownList<T> : IDropdownList
     {
-        #region Fields
-
         private readonly List<KeyValuePair<string, object>> _values = new();
-
-        #endregion
-
-        #region Constructors
-
-        #endregion
-
-        #region Methods
 
         public void Add(string displayName, T value) =>
             _values.Add(new KeyValuePair<string, object>(displayName, value));
@@ -32,7 +22,5 @@ namespace DreamBuilders
 
             return result;
         }
-
-        #endregion
     }
 }

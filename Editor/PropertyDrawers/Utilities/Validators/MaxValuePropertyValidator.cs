@@ -5,16 +5,6 @@ namespace DreamBuilders.Editor
 {
     public class MaxValuePropertyValidator : PropertyValidatorBase
     {
-        #region Fields
-
-        #endregion
-
-        #region Constructors
-
-        #endregion
-
-        #region Methods
-
         public override void ValidateProperty(SerializedProperty property)
         {
             MaxValueAttribute maxValueAttribute = PropertyUtility.GetAttribute<MaxValueAttribute>(property);
@@ -81,7 +71,5 @@ namespace DreamBuilders.Editor
                 }
             }
         }
-
-        #endregion
     }
 }

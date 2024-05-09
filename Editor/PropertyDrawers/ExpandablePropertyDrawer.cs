@@ -7,16 +7,6 @@ namespace DreamBuilders.Editor
     [CustomPropertyDrawer(typeof(ExpandableAttribute))]
     public class ExpandablePropertyDrawer : PropertyDrawerBase
     {
-        #region Fields
-
-        #endregion
-
-        #region Constructors
-
-        #endregion
-
-        #region Methods
-
         protected override float GetPropertyHeight_Internal(SerializedProperty property, GUIContent label)
         {
             if (property.objectReferenceValue == null)
@@ -169,7 +159,5 @@ namespace DreamBuilders.Editor
                 serializedObject.ApplyModifiedProperties();
             }
         }
-
-        #endregion
     }
 }

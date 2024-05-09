@@ -4,16 +4,6 @@ namespace DreamBuilders.Editor
 {
     public class RequiredPropertyValidator : PropertyValidatorBase
     {
-        #region Fields
-
-        #endregion
-
-        #region Constructors
-
-        #endregion
-
-        #region Methods
-
         public override void ValidateProperty(SerializedProperty property)
         {
             RequiredAttribute requiredAttribute = PropertyUtility.GetAttribute<RequiredAttribute>(property);
@@ -39,7 +29,5 @@ namespace DreamBuilders.Editor
 
             DreamBuildersEditorGUI.HelpBox_Layout(message, messageType, property.serializedObject.targetObject);
         }
-
-        #endregion
     }
 }

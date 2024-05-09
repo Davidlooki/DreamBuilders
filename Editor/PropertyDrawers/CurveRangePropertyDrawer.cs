@@ -6,16 +6,6 @@ namespace DreamBuilders.Editor
     [CustomPropertyDrawer(typeof(CurveRangeAttribute))]
     public class CurveRangePropertyDrawer : PropertyDrawerBase
     {
-        #region Fields
-
-        #endregion
-
-        #region Constructors
-
-        #endregion
-
-        #region Methods
-
         protected override float GetPropertyHeight_Internal(SerializedProperty property, GUIContent label) =>
             property.propertyType == SerializedPropertyType.AnimationCurve
                 ? GetPropertyHeight(property)
@@ -51,7 +41,5 @@ namespace DreamBuilders.Editor
 
             EditorGUI.EndProperty();
         }
-
-        #endregion
     }
 }

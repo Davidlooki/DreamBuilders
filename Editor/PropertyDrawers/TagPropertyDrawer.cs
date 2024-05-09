@@ -7,16 +7,6 @@ namespace DreamBuilders.Editor
     [CustomPropertyDrawer(typeof(TagAttribute))]
     public class TagPropertyDrawer : PropertyDrawerBase
     {
-        #region Fields
-
-        #endregion
-
-        #region Constructors
-
-        #endregion
-
-        #region Methods
-
         protected override float GetPropertyHeight_Internal(SerializedProperty property, GUIContent label) =>
             (property.propertyType == SerializedPropertyType.String)
                 ? GetPropertyHeight(property)
@@ -65,7 +55,5 @@ namespace DreamBuilders.Editor
 
             EditorGUI.EndProperty();
         }
-
-        #endregion
     }
 }

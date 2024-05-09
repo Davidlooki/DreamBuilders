@@ -8,17 +8,7 @@ namespace DreamBuilders.Editor
     [CustomPropertyDrawer(typeof(SortingLayerAttribute))]
     public class SortingLayerPropertyDrawer : PropertyDrawerBase
     {
-        #region Fields
-
         private const string TypeWarningMessage = "{0} must be an int or a string";
-
-        #endregion
-
-        #region Constructors
-
-        #endregion
-
-        #region Methods
 
         protected override float GetPropertyHeight_Internal(SerializedProperty property, GUIContent label) =>
             property.propertyType
@@ -95,7 +85,5 @@ namespace DreamBuilders.Editor
 
         private static int IndexOf(string[] layers, string layer) =>
             Mathf.Clamp(Array.IndexOf(layers, layer), 0, layers.Length - 1);
-
-        #endregion
     }
 }

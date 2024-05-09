@@ -6,8 +6,6 @@ namespace DreamBuilders
                         order = 0)]
     public class GameplayTag : ScriptableObject
     {
-        #region Fields
-
 #if UNITY_EDITOR
         [field: Delayed]
 #endif
@@ -16,20 +14,12 @@ namespace DreamBuilders
 
         [field: SerializeField] public GameplayTag Parent { get; protected set; }
 
-        #endregion
-
-        #region Unity Methods
-
 #if UNITY_EDITOR
         private void OnValidate()
         {
             if (string.IsNullOrEmpty(Name)) Name = name;
         }
 #endif
-
-        #endregion
-
-        #region Custom Methods
 
         public bool IsDescendantOf(GameplayTag other) => 
             Parent != null && (Parent == other || IsDescendantOf(other.Parent));
@@ -39,7 +29,5 @@ namespace DreamBuilders
         {
             return base.ToString();
         }
-
-        #endregion
     }
 }

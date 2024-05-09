@@ -10,21 +10,11 @@ namespace DreamBuilders.Editor
     [CustomEditor(typeof(Object), true)]
     public class DreamBuildersInspector : UnityEditor.Editor
     {
-        #region Fields
-
         private List<SerializedProperty> _serializedProperties = new();
         private IEnumerable<FieldInfo> _nonSerializedFields;
         private IEnumerable<PropertyInfo> _nativeProperties;
         private IEnumerable<MethodInfo> _methods;
         private Dictionary<string, SavedBool> _foldouts = new();
-
-        #endregion
-
-        #region Constructors
-
-        #endregion
-
-        #region Unity Methods
 
         protected virtual void OnEnable()
         {
@@ -205,11 +195,5 @@ namespace DreamBuilders.Editor
                 fontStyle = FontStyle.Bold,
                 alignment = TextAnchor.UpperCenter
             };
-
-        #endregion
-
-        #region Methods
-
-        #endregion
     }
 }

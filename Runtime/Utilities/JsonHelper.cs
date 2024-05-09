@@ -1,20 +1,10 @@
 ﻿using System;
 using UnityEngine;
 
-namespace DreamBuilders.Utilities
+namespace DreamBuilders
 {
     public static class JsonHelper
     {
-        #region Fields
-
-        #endregion
-
-        #region UnityMethods
-
-        #endregion
-
-        #region Methods
-
         public static T[] FromJson<T>(string json)
         {
             Wrapper<T> wrapper = JsonUtility.FromJson<Wrapper<T>>(json);
@@ -44,7 +34,5 @@ namespace DreamBuilders.Utilities
         {
             public T[] Items;
         }
-
-        #endregion
     }
 }

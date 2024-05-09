@@ -4,7 +4,6 @@ using UnityEngine.Events;
 
 public class StateMachineEvent : StateMachineBehaviour
 {
-    #region Fields
     public UnityEvent<Animator> m_OnStateMachineEnter = new UnityEvent<Animator>();
     public UnityEvent<Animator> m_OnStateMachineExit = new UnityEvent<Animator>();
     public UnityEvent<Animator> m_OnStateEnter = new UnityEvent<Animator>();
@@ -12,9 +11,7 @@ public class StateMachineEvent : StateMachineBehaviour
     public UnityEvent<Animator> m_OnStateMove = new UnityEvent<Animator>();
     public UnityEvent<Animator> m_OnStateIK = new UnityEvent<Animator>();
     public UnityEvent<Animator> m_OnStateExit = new UnityEvent<Animator>();
-    #endregion
 
-    #region Unity Methods
     override public void OnStateMachineEnter(Animator animator, int stateMachinePathHash)
     {
         m_OnStateMachineEnter?.Invoke(animator);
@@ -77,8 +74,4 @@ public class StateMachineEvent : StateMachineBehaviour
     {
         m_OnStateExit?.Invoke(animator);
     }
-    #endregion
-
-    #region Custom Methods
-    #endregion
 }

@@ -6,16 +6,6 @@ namespace DreamBuilders.Editor
 {
     public static class ButtonUtility
     {
-        #region Fields
-
-        #endregion
-
-        #region Constructors
-
-        #endregion
-
-        #region Methods
-
         public static bool IsEnabled(Object target, MethodInfo method)
         {
             EnableIfAttributeBase enableIfAttribute = method.GetCustomAttribute<EnableIfAttributeBase>();
@@ -49,7 +39,5 @@ namespace DreamBuilders.Editor
 
             return false;
         }
-
-        #endregion
     }
 }

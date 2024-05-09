@@ -9,21 +9,11 @@ namespace DreamBuilders.Editor
     [CustomPropertyDrawer(typeof(InputAxisAttribute))]
     public class InputAxisPropertyDrawer : PropertyDrawerBase
     {
-        #region Fields
-
         private static readonly string AssetPath = Path.Combine("ProjectSettings", "InputManager.asset");
 
         private const string AxesPropertyPath = "m_Axes";
 
         private const string NamePropertyPath = "m_Name";
-
-        #endregion
-
-        #region Constructors
-
-        #endregion
-
-        #region Methods
 
         protected override float GetPropertyHeight_Internal(SerializedProperty property, GUIContent label) =>
             (property.propertyType == SerializedPropertyType.String)
@@ -82,7 +72,5 @@ namespace DreamBuilders.Editor
 
             EditorGUI.EndProperty();
         }
-
-        #endregion
     }
 }

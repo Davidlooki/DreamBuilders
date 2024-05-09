@@ -10,16 +10,6 @@ namespace DreamBuilders.Editor
     [CustomPropertyDrawer(typeof(DropdownAttribute))]
     public class DropdownPropertyDrawer : PropertyDrawerBase
     {
-        #region Fields
-
-        #endregion
-
-        #region Constructors
-
-        #endregion
-
-        #region Methods
-
         protected override float GetPropertyHeight_Internal(SerializedProperty property, GUIContent label)
         {
             DropdownAttribute dropdownAttribute = (DropdownAttribute) attribute;
@@ -152,7 +142,5 @@ namespace DreamBuilders.Editor
              (values is IDropdownList));
 
         private Type GetElementType(object values) => ReflectionUtility.GetListElementType(values.GetType());
-
-        #endregion
     }
 }

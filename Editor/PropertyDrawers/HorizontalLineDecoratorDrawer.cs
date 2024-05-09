@@ -6,16 +6,6 @@ namespace DreamBuilders.Editor
     [CustomPropertyDrawer(typeof(HorizontalLineAttribute))]
     public class HorizontalLineDecoratorDrawer : DecoratorDrawer
     {
-        #region Fields
-
-        #endregion
-
-        #region Constructors
-
-        #endregion
-
-        #region Methods
-
         public override float GetHeight()
         {
             HorizontalLineAttribute lineAttr = (HorizontalLineAttribute) attribute;
@@ -29,7 +19,5 @@ namespace DreamBuilders.Editor
             HorizontalLineAttribute lineAttr = (HorizontalLineAttribute) attribute;
             DreamBuildersEditorGUI.HorizontalLine(rect, lineAttr.Height, lineAttr.Color.GetColor());
         }
-
-        #endregion
     }
 }

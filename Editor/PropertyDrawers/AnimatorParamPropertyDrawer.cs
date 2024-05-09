@@ -9,18 +9,8 @@ namespace DreamBuilders.Editor
     [CustomPropertyDrawer(typeof(AnimatorParamAttribute))]
     public class AnimatorParamPropertyDrawer : PropertyDrawerBase
     {
-        #region Fields
-
         private const string InvalidAnimatorControllerWarningMessage = "Target animator controller is null";
         private const string InvalidTypeWarningMessage = "{0} must be an int or a string";
-
-        #endregion
-
-        #region Constructors
-
-        #endregion
-
-        #region Methods
 
         protected override float GetPropertyHeight_Internal(SerializedProperty property, GUIContent label) =>
             (property.propertyType is SerializedPropertyType.Integer or SerializedPropertyType.String
@@ -162,7 +152,5 @@ namespace DreamBuilders.Editor
                 return animator.runtimeAnimatorController as AnimatorController;
             }
         }
-
-        #endregion
     }
 }

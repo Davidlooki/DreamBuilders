@@ -4,8 +4,6 @@ namespace DreamBuilders.Editor
 {
     internal class SavedBool
     {
-        #region Fields
-
         private bool _value;
         private readonly string _name;
 
@@ -21,16 +19,6 @@ namespace DreamBuilders.Editor
             }
         }
 
-        #endregion
-
-        #region Constructors
-
         public SavedBool(string name, bool value) => (_name, _value) = (name, EditorPrefs.GetBool(name, value));
-
-        #endregion
-
-        #region Methods
-
-        #endregion
     }
 }

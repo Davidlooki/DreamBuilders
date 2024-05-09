@@ -9,8 +9,6 @@ namespace DreamBuilders
     public abstract class Collection<T> : ScriptableObject, IList<T>, IReadOnlyList<T>,
         ICollection where T : ScriptableObject, ICollectionEntry
     {
-        #region Fields
-
         //[SerializeField] private int _initialId = 0;
 
         public T this[int index]
@@ -27,20 +25,12 @@ namespace DreamBuilders
         public object SyncRoot { get; }
         public bool IsFixedSize { get; }
 
-        #endregion
-
-        #region Unity Methods
-
         protected virtual void OnValidate()
         {
             if (ContainsDuplicateId(out var duplicatedId, out var duplicatedIndexPair))
                 Debug.LogWarning($"{name} contains duplicated id {duplicatedId} at " +
                                  $"index {duplicatedIndexPair.Item1}" + $" and {duplicatedIndexPair.Item2}");
         }
-
-        #endregion
-
-        #region Custom Methods
 
         public void Add(T t) => _entries.Add(t);
         public void Insert(int index, T t) => _entries.Insert(index, t);
@@ -171,7 +161,5 @@ namespace DreamBuilders
         public IEnumerator<T> GetEnumerator() => _entries.GetEnumerator();
 
         IEnumerator IEnumerable.GetEnumerator() => _entries.GetEnumerator();
-
-        #endregion
     }
 }

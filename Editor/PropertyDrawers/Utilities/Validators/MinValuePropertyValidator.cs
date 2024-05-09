@@ -5,16 +5,6 @@ namespace DreamBuilders.Editor
 {
     public class MinValuePropertyValidator : PropertyValidatorBase
     {
-        #region Fields
-
-        #endregion
-
-        #region Constructors
-
-        #endregion
-
-        #region Methods
-
         public override void ValidateProperty(SerializedProperty property)
         {
             MinValueAttribute minValueAttribute = PropertyUtility.GetAttribute<MinValueAttribute>(property);
@@ -83,7 +73,5 @@ namespace DreamBuilders.Editor
                 }
             }
         }
-
-        #endregion
     }
 }

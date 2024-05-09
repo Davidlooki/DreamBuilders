@@ -6,16 +6,6 @@ namespace DreamBuilders.Editor
     [CustomPropertyDrawer(typeof(InfoBoxAttribute))]
     public class InfoBoxDecoratorDrawer : DecoratorDrawer
     {
-        #region Fields
-
-        #endregion
-
-        #region Constructors
-
-        #endregion
-
-        #region Unity Methods
-
         public override float GetHeight()
         {
             return GetHelpBoxHeight();
@@ -34,10 +24,6 @@ namespace DreamBuilders.Editor
 
             DrawInfoBox(infoBoxRect, infoBoxAttribute.Text, infoBoxAttribute.Type);
         }
-
-        #endregion
-
-        #region Methods
 
         private float GetHelpBoxHeight()
         {
@@ -76,7 +62,5 @@ namespace DreamBuilders.Editor
 
             DreamBuildersEditorGUI.HelpBox(rect, infoText, messageType);
         }
-
-        #endregion
     }
 }

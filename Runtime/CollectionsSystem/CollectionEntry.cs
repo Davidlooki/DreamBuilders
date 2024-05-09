@@ -5,9 +5,7 @@ namespace DreamBuilders
 {
     public abstract class CollectionEntry : ScriptableObject, ICollectionEntry
     {
-        #region Fields
-
-        [field: SerializeField] public Sprite Icon { get; protected set; } = null;
+            [field: SerializeField] public Sprite Icon { get; protected set; } = null;
         [field: SerializeField] public AssetReferenceSprite AddressableIcon = null;
 
 
@@ -31,17 +29,9 @@ namespace DreamBuilders
 
         [field: SerializeField] public GameplayTag[] Tags { get; protected set; }
 
-        #endregion
-
-        #region Unity Methods
-
 #if UNITY_EDITOR
         protected virtual void OnValidate() => OnNameChanged();
 #endif
-
-        #endregion
-
-        #region Custom Methods
 
 #if UNITY_EDITOR
         protected void GenerateId() => Id = new System.Random(Name.GetHashCode()).Next();
@@ -51,7 +41,5 @@ namespace DreamBuilders
             if (!_notRandomId) GenerateId();
         }
 #endif
-
-        #endregion
     }
 }

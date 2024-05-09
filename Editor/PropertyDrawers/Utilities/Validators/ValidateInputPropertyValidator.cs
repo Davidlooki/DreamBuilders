@@ -1,21 +1,10 @@
 using UnityEditor;
 using System.Reflection;
-using System;
 
 namespace DreamBuilders.Editor
 {
     public class ValidateInputPropertyValidator : PropertyValidatorBase
     {
-        #region Fields
-
-        #endregion
-
-        #region Constructors
-
-        #endregion
-
-        #region Methods
-
         public override void ValidateProperty(SerializedProperty property)
         {
             ValidateInputAttribute validateInputAttribute =
@@ -75,7 +64,5 @@ namespace DreamBuilders.Editor
                 }
             }
         }
-
-        #endregion
     }
 }

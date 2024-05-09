@@ -9,20 +9,10 @@ namespace DreamBuilders.Editor
     [CustomPropertyDrawer(typeof(SceneAttribute))]
     public class ScenePropertyDrawer : PropertyDrawerBase
     {
-        #region Fields
-
         private const string SceneListItem = "{0} ({1})";
         private const string ScenePattern = @".+\/(.+)\.unity";
         private const string TypeWarningMessage = "{0} must be an int or a string";
         private const string BuildSettingsWarningMessage = "No scenes in the build settings";
-
-        #endregion
-
-        #region Constructors
-
-        #endregion
-
-        #region Methods
 
         protected override float GetPropertyHeight_Internal(SerializedProperty property, GUIContent label) =>
             property.propertyType is SerializedPropertyType.String or SerializedPropertyType.Integer
@@ -97,7 +87,5 @@ namespace DreamBuilders.Editor
 
         private static int IndexOf(string[] scenes, string scene) =>
             Mathf.Clamp(Array.IndexOf(scenes, scene), 0, scenes.Length - 1);
-
-        #endregion
     }
 }

@@ -2,10 +2,6 @@ using UnityEngine;
 
 public class MathX
 {
-    #region Methods
-
-    #region Hermite
-
     /// <summary>
     ///  Interpolate while easing in and out at the limits.
     /// </summary>
@@ -35,10 +31,6 @@ public class MathX
     /// <returns></returns>
     public static Vector3 Hermite(Vector3 start, Vector3 end, float value) =>
         new Vector3(Hermite(start.x, end.x, value), Hermite(start.y, end.y, value), Hermite(start.z, end.z, value));
-
-    #endregion
-
-    #region Sinerp
 
     /// <summary>
     /// Sinusoidal interpolation while easing around the end, when value is near one.
@@ -73,10 +65,6 @@ public class MathX
             Mathf.Lerp(start.y, end.y, Mathf.Sin(value * Mathf.PI * 0.5f)),
             Mathf.Lerp(start.z, end.z, Mathf.Sin(value * Mathf.PI * 0.5f)));
 
-    #endregion
-
-    #region Coserp
-
     //Ease in
     /// <summary>
     /// Cosenoidal interpolation easing in when value is near zero.
@@ -107,10 +95,6 @@ public class MathX
     /// <returns></returns>
     public static Vector3 Coserp(Vector3 start, Vector3 end, float value) =>
         new(Coserp(start.x, end.x, value), Coserp(start.y, end.y, value), Coserp(start.z, end.z, value));
-
-    #endregion
-
-    #region Berp
 
     /// <summary>
     /// Boing-like interpolation overshoot, then waver back and forth around the end value before coming to a rest.
@@ -152,10 +136,6 @@ public class MathX
         return new Vector3(Berp(start.x, end.x, value), Berp(start.y, end.y, value), Berp(start.z, end.z, value));
     }
 
-    #endregion
-
-    #region SmoothStep
-
     /// <summary>
     /// Like Lerp, but has ease-in and ease-out of the values.
     /// </summary>
@@ -196,10 +176,6 @@ public class MathX
         return new Vector3(SmoothStep(vec.x, min, max), SmoothStep(vec.y, min, max), SmoothStep(vec.z, min, max));
     }
 
-    #endregion
-
-    #region NearestPoint
-
     /// <summary>
     /// Returns the nearest point on a line to a point.
     /// </summary>
@@ -231,10 +207,6 @@ public class MathX
 
         return lineStart + (closestPoint * lineDirection);
     }
-
-    #endregion
-
-    #region NearestPointStrict
 
     /// <summary>
     /// Works like NearestPoint except the end of the line is clamped.
@@ -268,10 +240,6 @@ public class MathX
         return lineStart + (Mathf.Clamp(closestPoint, 0.0f, Vector3.Magnitude(fullDirection)) * lineDirection);
     }
 
-    #endregion
-
-    #region Bounce
-
     /// <summary>
     /// Returns a value between 0 and 1 that can be used to easily make bouncing.
     /// </summary>
@@ -302,10 +270,6 @@ public class MathX
         return new Vector3(Bounce(vec.x), Bounce(vec.y), Bounce(vec.z));
     }
 
-    #endregion
-
-    #region Approx
-
     /// <summary>
     /// Test for value that is near specified float (due to floating point inprecision).
     /// </summary>
@@ -325,10 +289,6 @@ public class MathX
     /// <returns></returns>
     public static bool Approx(Vector3 val, Vector3 about, float range) =>
         (val - about).sqrMagnitude < range * range;
-
-    #endregion
-
-    #region Clerp
 
     /// <summary>
     /// Circular Lerp is Like lerp but handles the wraparound from 0 to 360.
@@ -362,14 +322,6 @@ public class MathX
         return retval;
     }
 
-    #endregion
-
-    #region Etc
-
     public static double Sigmoid(double input, double coeficient = 1) =>
         (1 / (1 + System.Math.Exp(-input * coeficient)));
-
-    #endregion
-
-    #endregion
 }

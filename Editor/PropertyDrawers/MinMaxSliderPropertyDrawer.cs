@@ -6,16 +6,6 @@ namespace DreamBuilders.Editor
     [CustomPropertyDrawer(typeof(MinMaxSliderAttribute))]
     public class MinMaxSliderPropertyDrawer : PropertyDrawerBase
     {
-        #region Fields
-
-        #endregion
-
-        #region Constructors
-
-        #endregion
-
-        #region Methods
-
         protected override float GetPropertyHeight_Internal(SerializedProperty property, GUIContent label) =>
             property.propertyType is SerializedPropertyType.Vector2 or SerializedPropertyType.Vector2Int
                 ? GetPropertyHeight(property)
@@ -124,7 +114,5 @@ namespace DreamBuilders.Editor
 
             EditorGUI.EndProperty();
         }
-
-        #endregion
     }
 }

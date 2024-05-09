@@ -9,22 +9,12 @@ namespace DreamBuilders.Editor
 {
     public class ReorderableListPropertyDrawer : SpecialCasePropertyDrawerBase
     {
-        #region Fields
-
         public static readonly ReorderableListPropertyDrawer Instance = new ReorderableListPropertyDrawer();
 
         private readonly Dictionary<string, ReorderableList> _reorderableListsByPropertyName =
             new Dictionary<string, ReorderableList>();
 
         private GUIStyle _labelStyle;
-
-        #endregion
-
-        #region Constructors
-
-        #endregion
-
-        #region Methods
 
         private GUIStyle GetLabelStyle() =>
             _labelStyle ?? new GUIStyle(EditorStyles.boldLabel) {richText = true};
@@ -182,7 +172,5 @@ namespace DreamBuilders.Editor
             if (usedEvent)
                 currentEvent.Use();
         }
-
-        #endregion
     }
 }

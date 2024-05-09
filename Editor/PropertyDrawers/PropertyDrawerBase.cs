@@ -5,16 +5,6 @@ namespace DreamBuilders.Editor
 {
     public abstract class PropertyDrawerBase : PropertyDrawer
     {
-        #region Fields
-
-        #endregion
-
-        #region Constructors
-
-        #endregion
-
-        #region Methods
-
         public sealed override void OnGUI(Rect rect, SerializedProperty property, GUIContent label)
         {
             // Check if visible
@@ -73,7 +63,5 @@ namespace DreamBuilders.Editor
 
             EditorGUI.PropertyField(propertyRect, property, true);
         }
-
-        #endregion
     }
 }

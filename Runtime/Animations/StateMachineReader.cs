@@ -4,7 +4,6 @@ using UnityEngine.Events;
 [RequireComponent(typeof(Animator))]
 public class StateMachineReader : MonoBehaviour
 {
-    #region Fields
     [SerializeField] private UnityEvent<Animator> _onStateMachineEnter = new UnityEvent<Animator>();
     [SerializeField] private UnityEvent<Animator> _onStateMachineExit = new UnityEvent<Animator>();
     [SerializeField] private UnityEvent<Animator> _onStateEnter = new UnityEvent<Animator>();
@@ -14,9 +13,7 @@ public class StateMachineReader : MonoBehaviour
     [SerializeField] private UnityEvent<Animator> _onStateExit = new UnityEvent<Animator>();
 
     private Animator _animator = null;
-    #endregion
 
-    #region Unity Methods
     private void Awake()
     {
         _animator = GetComponent<Animator>();
@@ -34,8 +31,4 @@ public class StateMachineReader : MonoBehaviour
         //_animatorHelper.m_OnStateIK.AddListener(() => _onStateIK?.Invoke(_animator));
         //_animatorHelper.m_OnStateExit.AddListener(() => _onStateExit?.Invoke(_animator));
     }
-    #endregion
-
-    #region Custom Methods
-    #endregion
 }

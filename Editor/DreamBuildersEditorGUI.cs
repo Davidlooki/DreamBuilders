@@ -10,8 +10,6 @@ namespace DreamBuilders.Editor
 {
     public static class DreamBuildersEditorGUI
     {
-        #region Fields
-
         public const float IndentLength = 15.0f;
         public const float HorizontalSpacing = 2.0f;
 
@@ -19,14 +17,6 @@ namespace DreamBuilders.Editor
 
         private delegate void PropertyFieldFunction(Rect rect, SerializedProperty property, GUIContent label,
                                                     bool includeChildren);
-
-        #endregion
-
-        #region Constructors
-
-        #endregion
-
-        #region Methods
 
         public static void PropertyField(Rect rect, SerializedProperty property, bool includeChildren) =>
             PropertyField_Implementation(rect, property, includeChildren, DrawPropertyField);
@@ -350,7 +340,5 @@ namespace DreamBuilders.Editor
                     break;
             }
         }
-
-        #endregion
     }
 }

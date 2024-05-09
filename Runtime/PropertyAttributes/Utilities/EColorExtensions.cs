@@ -4,15 +4,6 @@ namespace DreamBuilders
 {
     public static class EColorExtensions
     {
-        #region Fields
-
-        #endregion
-
-        #region Constructors
-
-        #endregion
-
-        #region Methods
         public static Color GetColor(this EColor color)
         {
             switch (color)
@@ -45,6 +36,5 @@ namespace DreamBuilders
                     return new Color32(0, 0, 0, 255);
             }
         }
-        #endregion
     }
 }

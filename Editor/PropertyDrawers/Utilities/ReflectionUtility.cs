@@ -8,16 +8,6 @@ namespace DreamBuilders.Editor
 {
     public static class ReflectionUtility
     {
-        #region Fields
-
-        #endregion
-
-        #region Constructors
-
-        #endregion
-
-        #region Methods
-
         public static IEnumerable<FieldInfo> GetAllFields(object target, Func<FieldInfo, bool> predicate)
         {
             if (target == null)
@@ -117,7 +107,5 @@ namespace DreamBuilders.Editor
 
             return types;
         }
-
-        #endregion
     }
 }

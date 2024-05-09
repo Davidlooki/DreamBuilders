@@ -10,16 +10,6 @@ namespace DreamBuilders.Editor
 {
     public static class PropertyUtility
     {
-        #region Fields
-
-        #endregion
-
-        #region Constructors
-
-        #endregion
-
-        #region Methods
-
         public static T GetAttribute<T>(SerializedProperty property) where T : class
         {
             T[] attributes = GetAttributes<T>(property);
@@ -329,7 +319,5 @@ namespace DreamBuilders.Editor
 
             return enumerator.Current;
         }
-
-        #endregion
     }
 }

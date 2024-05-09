@@ -5,13 +5,7 @@ namespace DreamBuilders.Editor
 {
     public static class ValidatorAttributeExtensions
     {
-        #region Fields
-
         private static readonly Dictionary<Type, PropertyValidatorBase> _validatorsByAttributeType;
-
-        #endregion
-
-        #region Constructors
 
         static ValidatorAttributeExtensions()
         {
@@ -24,15 +18,9 @@ namespace DreamBuilders.Editor
             };
         }
 
-        #endregion
-
-        #region Methods
-
         public static PropertyValidatorBase GetValidator(this ValidatorAttribute attr) =>
             _validatorsByAttributeType.TryGetValue(attr.GetType(), out PropertyValidatorBase validator)
                 ? validator
                 : null;
-
-        #endregion
     }
 }
