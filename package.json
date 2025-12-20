@@ -1,0 +1,13 @@
+{
+  "name": "com.dreambuilders.dreambuilders",
+  "version": "1.0.0",
+  "displayName": "Dream Builders",
+  "description": "Dream Builders library",
+  "keywords": [],
+  "author": {
+    "name": "Davidlooki",
+    "email": "davidlooki@hotmail.com",
+    "url": "https://github.com/Davidlooki/DreamBuilders"
+  },
+  "type": "library"
+}
