@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "displayName": "Dream Builders",
   "description": "Dream Builders library",
+  "dependencies": {},
   "keywords": [],
   "author": {
     "name": "Davidlooki",
