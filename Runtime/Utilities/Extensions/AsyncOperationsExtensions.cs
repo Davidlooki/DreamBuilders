@@ -1,0 +1,19 @@
+using UnityEngine;
+using System.Threading.Tasks;
+
+namespace DreamBuilders
+{
+    public static class AsyncOperationExtensions
+    {
+        /// <summary>
+        /// Extension method that converts an AsyncOperation into a Task.
+        /// </summary>
+        public static Task AsTask(this AsyncOperation asyncOperation)
+        {
+            var tcs = new TaskCompletionSource<bool>();
+            asyncOperation.completed += _ => tcs.SetResult(true);
+
+            return tcs.Task;
+        }
+    }
+}
