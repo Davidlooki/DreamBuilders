@@ -1,0 +1,4 @@
+namespace DreamBuilders.EventsSO
+{
+    [System.Serializable] public class UnityUintEvent : UnityEngine.Events.UnityEvent<uint> { }
+}
