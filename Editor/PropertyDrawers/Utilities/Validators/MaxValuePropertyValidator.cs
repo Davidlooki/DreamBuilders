@@ -7,7 +7,7 @@ namespace DreamBuilders.Editor
     {
         public override void ValidateProperty(SerializedProperty property)
         {
-            MaxValueAttribute maxValueAttribute = PropertyUtility.GetAttribute<MaxValueAttribute>(property);
+            MaxValueAttribute maxValueAttribute = property.GetAttribute<MaxValueAttribute>();
 
             switch (property.propertyType)
             {

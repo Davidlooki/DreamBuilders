@@ -12,7 +12,7 @@ namespace DreamBuilders.Editor
             if (property.objectReferenceValue == null)
                 return GetPropertyHeight(property);
 
-            if (!typeof(ScriptableObject).IsAssignableFrom(PropertyUtility.GetPropertyType(property)))
+            if (!typeof(ScriptableObject).IsAssignableFrom(property.GetPropertyType()))
                 return GetPropertyHeight(property) + GetHelpBoxHeight();
 
             ScriptableObject scriptableObject = property.objectReferenceValue as ScriptableObject;
@@ -36,7 +36,7 @@ namespace DreamBuilders.Editor
                     if (childProperty.name.Equals("m_Script", StringComparison.Ordinal))
                         continue;
 
-                    if (!PropertyUtility.IsVisible(childProperty))
+                    if (!childProperty.IsVisible())
                         continue;
 
                     totalHeight += GetPropertyHeight(childProperty);
@@ -57,7 +57,7 @@ namespace DreamBuilders.Editor
             }
             else
             {
-                if (typeof(ScriptableObject).IsAssignableFrom(PropertyUtility.GetPropertyType(property)))
+                if (typeof(ScriptableObject).IsAssignableFrom(property.GetPropertyType()))
                 {
                     if ((ScriptableObject)property.objectReferenceValue == null)
                     {
@@ -138,7 +138,7 @@ namespace DreamBuilders.Editor
                         if (childProperty.name.Equals("m_Script", StringComparison.Ordinal))
                             continue;
 
-                        if (!PropertyUtility.IsVisible(childProperty))
+                        if (!childProperty.IsVisible())
                             continue;
 
                         float childHeight = GetPropertyHeight(childProperty);

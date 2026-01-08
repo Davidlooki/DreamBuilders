@@ -8,7 +8,7 @@ namespace DreamBuilders.Editor
     public class EnumFlagsPropertyDrawer : PropertyDrawerBase
     {
         protected override float GetPropertyHeight_Internal(SerializedProperty property, GUIContent label) =>
-            PropertyUtility.GetTargetObjectOfProperty(property) is Enum
+            property.GetTargetObjectOfProperty() is Enum
                 ? GetPropertyHeight(property)
                 : GetPropertyHeight(property) + GetHelpBoxHeight();
 
@@ -16,7 +16,7 @@ namespace DreamBuilders.Editor
         {
             EditorGUI.BeginProperty(rect, label, property);
 
-            if (PropertyUtility.GetTargetObjectOfProperty(property) is Enum targetEnum)
+            if (property.GetTargetObjectOfProperty() is Enum targetEnum)
             {
                 Enum enumNew = EditorGUI.EnumFlagsField(rect, label.text, targetEnum);
                 property.intValue = (int) Convert.ChangeType(enumNew, targetEnum.GetType());

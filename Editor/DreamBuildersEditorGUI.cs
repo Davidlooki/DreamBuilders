@@ -36,7 +36,7 @@ namespace DreamBuilders.Editor
                                                          PropertyFieldFunction propertyFieldFunction)
         {
             SpecialCaseDrawerAttribute specialCaseAttribute =
-                PropertyUtility.GetAttribute<SpecialCaseDrawerAttribute>(property);
+                property.GetAttribute<SpecialCaseDrawerAttribute>();
             if (specialCaseAttribute != null)
             {
                 specialCaseAttribute.GetDrawer().OnGUI(rect, property);
@@ -44,22 +44,22 @@ namespace DreamBuilders.Editor
             else
             {
                 // Check if visible
-                if (!PropertyUtility.IsVisible(property)) return;
+                if (!property.IsVisible()) return;
 
                 // Validate
                 foreach (ValidatorAttribute validatorAttribute in
-                         PropertyUtility.GetAttributes<ValidatorAttribute>(property))
+                         property.GetAttributes<ValidatorAttribute>())
                     validatorAttribute.GetValidator().ValidateProperty(property);
 
                 // Check if enabled and draw
                 EditorGUI.BeginChangeCheck();
 
-                using (new EditorGUI.DisabledScope(!PropertyUtility.IsEnabled(property)))
-                    propertyFieldFunction.Invoke(rect, property, PropertyUtility.GetLabel(property), includeChildren);
+                using (new EditorGUI.DisabledScope(!property.IsEnabled()))
+                    propertyFieldFunction.Invoke(rect, property, property.GetLabel(), includeChildren);
 
                 // Call OnValueChanged callbacks
                 if (EditorGUI.EndChangeCheck())
-                    PropertyUtility.CallOnValueChangedCallbacks(property);
+                    property.CallOnValueChangedCallbacks();
             }
         }
 

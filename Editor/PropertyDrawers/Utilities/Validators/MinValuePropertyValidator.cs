@@ -7,7 +7,7 @@ namespace DreamBuilders.Editor
     {
         public override void ValidateProperty(SerializedProperty property)
         {
-            MinValueAttribute minValueAttribute = PropertyUtility.GetAttribute<MinValueAttribute>(property);
+            MinValueAttribute minValueAttribute = property.GetAttribute<MinValueAttribute>();
 
             switch (property.propertyType)
             {

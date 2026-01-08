@@ -11,9 +11,9 @@ namespace DreamBuilders.Editor
             EnableIfAttributeBase enableIfAttribute = method.GetCustomAttribute<EnableIfAttributeBase>();
             if (enableIfAttribute == null) return true;
 
-            List<bool> conditionValues = PropertyUtility.GetConditionValues(target, enableIfAttribute.Conditions);
+            List<bool> conditionValues = target.GetConditionValues(enableIfAttribute.Conditions);
             if (conditionValues.Count > 0)
-                return PropertyUtility.GetConditionsFlag(conditionValues, enableIfAttribute.ConditionOperator,
+                return conditionValues.GetConditionsFlag(enableIfAttribute.ConditionOperator,
                                                          enableIfAttribute.Inverted);
 
             string message = enableIfAttribute.GetType().Name +
@@ -28,9 +28,9 @@ namespace DreamBuilders.Editor
             ShowIfAttributeBase showIfAttribute = method.GetCustomAttribute<ShowIfAttributeBase>();
             if (showIfAttribute == null) return true;
 
-            List<bool> conditionValues = PropertyUtility.GetConditionValues(target, showIfAttribute.Conditions);
+            List<bool> conditionValues = target.GetConditionValues(showIfAttribute.Conditions);
             if (conditionValues.Count > 0)
-                return PropertyUtility.GetConditionsFlag(conditionValues, showIfAttribute.ConditionOperator,
+                return conditionValues.GetConditionsFlag(showIfAttribute.ConditionOperator,
                                                          showIfAttribute.Inverted);
 
             string message = showIfAttribute.GetType().Name +

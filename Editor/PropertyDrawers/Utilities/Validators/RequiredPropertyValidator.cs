@@ -6,7 +6,7 @@ namespace DreamBuilders.Editor
     {
         public override void ValidateProperty(SerializedProperty property)
         {
-            RequiredAttribute requiredAttribute = PropertyUtility.GetAttribute<RequiredAttribute>(property);
+            RequiredAttribute requiredAttribute = property.GetAttribute<RequiredAttribute>();
 
             string message;
             MessageType messageType;

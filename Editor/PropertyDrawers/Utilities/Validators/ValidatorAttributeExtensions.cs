@@ -19,8 +19,6 @@ namespace DreamBuilders.Editor
         }
 
         public static PropertyValidatorBase GetValidator(this ValidatorAttribute attr) =>
-            _validatorsByAttributeType.TryGetValue(attr.GetType(), out PropertyValidatorBase validator)
-                ? validator
-                : null;
+            _validatorsByAttributeType.GetValueOrDefault(attr.GetType());
     }
 }

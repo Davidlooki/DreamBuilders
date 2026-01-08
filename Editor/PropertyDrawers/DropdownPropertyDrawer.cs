@@ -4,6 +4,8 @@ using System.Collections;
 using System.Reflection;
 using System;
 using System.Collections.Generic;
+using DreamBuildersLibs;
+using JetBrains.Annotations;
 
 namespace DreamBuilders.Editor
 {
@@ -12,10 +14,9 @@ namespace DreamBuilders.Editor
     {
         protected override float GetPropertyHeight_Internal(SerializedProperty property, GUIContent label)
         {
-            DropdownAttribute dropdownAttribute = (DropdownAttribute) attribute;
+            DropdownAttribute dropdownAttribute = (DropdownAttribute)attribute;
             object values = GetValues(property, dropdownAttribute.ValuesName);
-            FieldInfo field =
-                ReflectionUtility.GetField(PropertyUtility.GetTargetObjectWithProperty(property), property.name);
+            property.GetTargetObjectWithProperty().TryGetField(property.name, out FieldInfo field);
 
             float propertyHeight = AreValuesValid(values, field)
                 ? GetPropertyHeight(property)
@@ -28,11 +29,11 @@ namespace DreamBuilders.Editor
         {
             EditorGUI.BeginProperty(rect, label, property);
 
-            DropdownAttribute dropdownAttribute = (DropdownAttribute) attribute;
-            object target = PropertyUtility.GetTargetObjectWithProperty(property);
+            DropdownAttribute dropdownAttribute = (DropdownAttribute)attribute;
+            object target = property.GetTargetObjectWithProperty();
 
             object valuesObject = GetValues(property, dropdownAttribute.ValuesName);
-            FieldInfo dropdownField = ReflectionUtility.GetField(target, property.name);
+            target.TryGetField(property.name, out FieldInfo dropdownField);
 
             if (AreValuesValid(valuesObject, dropdownField))
             {
@@ -60,10 +61,12 @@ namespace DreamBuilders.Editor
                             selectedValueIndex = 0;
 
                         DreamBuildersEditorGUI.Dropdown(
-                                                  rect, property.serializedObject, target, dropdownField, label.text,
-                                                  selectedValueIndex, values, displayOptions);
+                            rect, property.serializedObject, target, dropdownField, label.text,
+                            selectedValueIndex, values, displayOptions);
+
                         break;
                     }
+
                     case IDropdownList dropdown:
                     {
                         // Current value
@@ -89,18 +92,19 @@ namespace DreamBuilders.Editor
                             values.Add(value);
 
                             displayOptions.Add(key == null
-                                                   ? "<null>"
-                                                   : string.IsNullOrWhiteSpace(key)
-                                                       ? "<empty>"
-                                                       : key);
+                                ? "<null>"
+                                : string.IsNullOrWhiteSpace(key)
+                                    ? "<empty>"
+                                    : key);
                         }
 
                         if (selectedValueIndex < 0)
                             selectedValueIndex = 0;
 
                         DreamBuildersEditorGUI.Dropdown(
-                                                  rect, property.serializedObject, target, dropdownField, label.text,
-                                                  selectedValueIndex, values.ToArray(), displayOptions.ToArray());
+                            rect, property.serializedObject, target, dropdownField, label.text,
+                            selectedValueIndex, values.ToArray(), displayOptions.ToArray());
+
                         break;
                     }
                 }
@@ -116,31 +120,29 @@ namespace DreamBuilders.Editor
             EditorGUI.EndProperty();
         }
 
+        [CanBeNull]
         private object GetValues(SerializedProperty property, string valuesName)
         {
-            object target = PropertyUtility.GetTargetObjectWithProperty(property);
+            object target = property.GetTargetObjectWithProperty();
 
-            FieldInfo valuesFieldInfo = ReflectionUtility.GetField(target, valuesName);
-            if (valuesFieldInfo != null)
-                return valuesFieldInfo.GetValue(target);
-
-            PropertyInfo valuesPropertyInfo = ReflectionUtility.GetProperty(target, valuesName);
-            if (valuesPropertyInfo != null)
-                return valuesPropertyInfo.GetValue(target);
-
-            MethodInfo methodValuesInfo = ReflectionUtility.GetMethod(target, valuesName);
-            return methodValuesInfo != null &&
-                   methodValuesInfo.ReturnType != typeof(void) &&
-                   methodValuesInfo.GetParameters().Length == 0
-                ? methodValuesInfo.Invoke(target, null)
-                : null;
+            return target.TryGetField(valuesName, out FieldInfo valuesFieldInfo)
+                ? valuesFieldInfo.GetValue(target)
+                : target.TryGetProperty(valuesName, out PropertyInfo valuesPropertyInfo)
+                    ? valuesPropertyInfo.GetValue(target)
+                    : target.TryGetMethod(valuesName, out MethodInfo methodValuesInfo)
+                      && methodValuesInfo.ReturnType != typeof(void)
+                      && methodValuesInfo.GetParameters().Length == 0
+                        ? methodValuesInfo.Invoke(target, null)
+                        : null;
         }
 
         private bool AreValuesValid(object values, FieldInfo dropdownField) =>
-            values != null && dropdownField != null &&
-            ((values is IList && dropdownField.FieldType == GetElementType(values)) ||
-             (values is IDropdownList));
+            values != null
+            && dropdownField != null
+            && ((values is IList
+                 && dropdownField.FieldType == GetElementType(values))
+                || values is IDropdownList);
 
-        private Type GetElementType(object values) => ReflectionUtility.GetListElementType(values.GetType());
+        private Type GetElementType(object values) => values.GetType().GetListElementType();
     }
 }

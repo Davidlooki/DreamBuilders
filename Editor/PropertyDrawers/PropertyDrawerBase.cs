@@ -8,27 +8,27 @@ namespace DreamBuilders.Editor
         public sealed override void OnGUI(Rect rect, SerializedProperty property, GUIContent label)
         {
             // Check if visible
-            if (!PropertyUtility.IsVisible(property)) return;
+            if (!property.IsVisible()) return;
 
             // Validate
-            ValidatorAttribute[] validatorAttributes = PropertyUtility.GetAttributes<ValidatorAttribute>(property);
+            ValidatorAttribute[] validatorAttributes = property.GetAttributes<ValidatorAttribute>();
             foreach (ValidatorAttribute validatorAttribute in validatorAttributes)
                 validatorAttribute.GetValidator().ValidateProperty(property);
 
             // Check if enabled and draw
             EditorGUI.BeginChangeCheck();
-            using (new EditorGUI.DisabledScope(!PropertyUtility.IsEnabled(property)))
-                OnGUI_Internal(rect, property, PropertyUtility.GetLabel(property));
+            using (new EditorGUI.DisabledScope(!property.IsEnabled()))
+                OnGUI_Internal(rect, property, property.GetLabel());
 
             // Call OnValueChanged callbacks
             if (EditorGUI.EndChangeCheck())
-                PropertyUtility.CallOnValueChangedCallbacks(property);
+                property.CallOnValueChangedCallbacks();
         }
 
         protected abstract void OnGUI_Internal(Rect rect, SerializedProperty property, GUIContent label);
 
         public sealed override float GetPropertyHeight(SerializedProperty property, GUIContent label) =>
-            !PropertyUtility.IsVisible(property) ? 0.0f : GetPropertyHeight_Internal(property, label);
+            !property.IsVisible() ? 0.0f : GetPropertyHeight_Internal(property, label);
 
         protected virtual float GetPropertyHeight_Internal(SerializedProperty property, GUIContent label) =>
             EditorGUI.GetPropertyHeight(property, true);
@@ -36,7 +36,7 @@ namespace DreamBuilders.Editor
         protected float GetPropertyHeight(SerializedProperty property)
         {
             SpecialCaseDrawerAttribute specialCaseAttribute =
-                PropertyUtility.GetAttribute<SpecialCaseDrawerAttribute>(property);
+                property.GetAttribute<SpecialCaseDrawerAttribute>();
 
             return specialCaseAttribute != null
                 ? specialCaseAttribute.GetDrawer().GetPropertyHeight(property)

@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using DreamBuildersLibs;
 using UnityEditor;
 using UnityEditorInternal;
 using UnityEngine;
@@ -92,8 +93,8 @@ namespace DreamBuilders.Editor
 
         private Object GetAssignableObject(Object obj, ReorderableList list)
         {
-            Type listType = PropertyUtility.GetPropertyType(list.serializedProperty);
-            Type elementType = ReflectionUtility.GetListElementType(listType);
+            Type listType = list.serializedProperty.GetPropertyType();
+            Type elementType = listType.GetListElementType();
 
             if (elementType == null)
                 return null;

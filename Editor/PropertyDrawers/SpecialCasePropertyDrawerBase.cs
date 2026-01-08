@@ -8,21 +8,21 @@ namespace DreamBuilders.Editor
         public void OnGUI(Rect rect, SerializedProperty property)
         {
             // Check if visible
-            if (!PropertyUtility.IsVisible(property)) return;
+            if (!property.IsVisible()) return;
 
             // Validate
-            ValidatorAttribute[] validatorAttributes = PropertyUtility.GetAttributes<ValidatorAttribute>(property);
+            ValidatorAttribute[] validatorAttributes = property.GetAttributes<ValidatorAttribute>();
             foreach (ValidatorAttribute validatorAttribute in validatorAttributes)
                 validatorAttribute.GetValidator().ValidateProperty(property);
 
             // Check if enabled and draw
             EditorGUI.BeginChangeCheck();
-            using (new EditorGUI.DisabledScope(!PropertyUtility.IsEnabled(property)))
-                OnGUI_Internal(rect, property, PropertyUtility.GetLabel(property));
+            using (new EditorGUI.DisabledScope(!property.IsEnabled()))
+                OnGUI_Internal(rect, property, property.GetLabel());
 
             // Call OnValueChanged callbacks
             if (EditorGUI.EndChangeCheck())
-                PropertyUtility.CallOnValueChangedCallbacks(property);
+                property.CallOnValueChangedCallbacks();
         }
 
         public float GetPropertyHeight(SerializedProperty property) =>

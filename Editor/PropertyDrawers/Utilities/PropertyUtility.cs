@@ -4,6 +4,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using DreamBuildersLibs;
 using JetBrains.Annotations;
 using UnityEngine;
 
@@ -11,21 +12,19 @@ namespace DreamBuilders.Editor
 {
     public static class PropertyUtility
     {
-        public static T GetAttribute<T>(SerializedProperty property) where T : class
+        public static T GetAttribute<T>(this SerializedProperty property) where T : class
         {
             var attributes = GetAttributes<T>(property);
+
             return attributes.Length > 0 ? attributes[0] : null;
         }
 
-        public static T[] GetAttributes<T>(SerializedProperty property) where T : class
-        {
-            FieldInfo fieldInfo = ReflectionUtility.GetField(GetTargetObjectWithProperty(property), property.name);
-            return fieldInfo == null
+        public static T[] GetAttributes<T>(this SerializedProperty property) where T : class =>
+            !property.GetTargetObjectWithProperty().TryGetField(property.name, out FieldInfo fieldInfo)
                 ? new T[] { }
-                : (T[]) fieldInfo.GetCustomAttributes(typeof(T), true);
-        }
+                : (T[])fieldInfo.GetCustomAttributes(typeof(T), true);
 
-        public static GUIContent GetLabel(SerializedProperty property)
+        public static GUIContent GetLabel(this SerializedProperty property)
         {
             LabelAttribute labelAttribute = GetAttribute<LabelAttribute>(property);
             string labelText = (labelAttribute == null)
@@ -33,28 +32,26 @@ namespace DreamBuilders.Editor
                 : labelAttribute.Label;
 
             GUIContent label = new(labelText);
+
             return label;
         }
 
-        public static void CallOnValueChangedCallbacks(SerializedProperty property)
+        public static void CallOnValueChangedCallbacks(this SerializedProperty property)
         {
             OnValueChangedAttribute[] onValueChangedAttributes = GetAttributes<OnValueChangedAttribute>(property);
+
             if (onValueChangedAttributes.Length == 0)
                 return;
 
             object target = GetTargetObjectWithProperty(property);
             property.serializedObject
-                    .ApplyModifiedProperties(); // We must apply modifications so that the new value is updated in the serialized object
+                .ApplyModifiedProperties(); // We must apply modifications so that the new value is updated in the serialized object
 
             foreach (OnValueChangedAttribute onValueChangedAttribute in onValueChangedAttributes)
             {
-                MethodInfo callbackMethod = ReflectionUtility.GetMethod(target, onValueChangedAttribute.CallbackName);
-                if (callbackMethod != null &&
-                    callbackMethod.ReturnType == typeof(void) &&
-                    callbackMethod.GetParameters().Length == 0)
-                {
-                    callbackMethod.Invoke(target, new object[] { });
-                }
+                if (target.TryGetMethod(onValueChangedAttribute.CallbackName, out MethodInfo callbackMethod)
+                    && callbackMethod.ReturnType == typeof(void)
+                    && callbackMethod.GetParameters().Length == 0) { callbackMethod.Invoke(target, new object[] { }); }
                 else
                 {
                     string warning =
@@ -65,13 +62,15 @@ namespace DreamBuilders.Editor
             }
         }
 
-        public static bool IsEnabled(SerializedProperty property)
+        public static bool IsEnabled(this SerializedProperty property)
         {
             ReadOnlyAttribute readOnlyAttribute = GetAttribute<ReadOnlyAttribute>(property);
+
             if (readOnlyAttribute != null)
                 return false;
 
             EnableIfAttributeBase enableIfAttribute = GetAttribute<EnableIfAttributeBase>(property);
+
             if (enableIfAttribute == null)
                 return true;
 
@@ -94,6 +93,7 @@ namespace DreamBuilders.Editor
 
                 message = enableIfAttribute.GetType().Name +
                           " needs a valid enum field, property or method name to work";
+
                 Debug.LogWarning(message, property.serializedObject.targetObject);
 
                 return false;
@@ -104,19 +104,21 @@ namespace DreamBuilders.Editor
             if (conditionValues.Count > 0)
             {
                 return GetConditionsFlag(conditionValues, enableIfAttribute.ConditionOperator,
-                                         enableIfAttribute.Inverted);
+                    enableIfAttribute.Inverted);
             }
 
             message = enableIfAttribute.GetType().Name +
                       " needs a valid boolean condition field, property or method name to work";
+
             Debug.LogWarning(message, property.serializedObject.targetObject);
 
             return false;
         }
 
-        public static bool IsVisible(SerializedProperty property)
+        public static bool IsVisible(this SerializedProperty property)
         {
             ShowIfAttributeBase showIfAttribute = GetAttribute<ShowIfAttributeBase>(property);
+
             if (showIfAttribute == null)
                 return true;
 
@@ -139,6 +141,7 @@ namespace DreamBuilders.Editor
 
                 message = showIfAttribute.GetType().Name +
                           " needs a valid enum field, property or method name to work";
+
                 Debug.LogWarning(message, property.serializedObject.targetObject);
 
                 return false;
@@ -149,11 +152,12 @@ namespace DreamBuilders.Editor
             if (conditionValues.Count > 0)
             {
                 return GetConditionsFlag(conditionValues, showIfAttribute.ConditionOperator,
-                                         showIfAttribute.Inverted);
+                    showIfAttribute.Inverted);
             }
 
             message = showIfAttribute.GetType().Name +
                       " needs a valid boolean condition field, property or method name to work";
+
             Debug.LogWarning(message, property.serializedObject.targetObject);
 
             return false;
@@ -164,52 +168,52 @@ namespace DreamBuilders.Editor
         /// </summary>
         /// <param name="target">The target object.</param>
         /// <param name="enumName">Name of a field, property, or method that returns an enum.</param>
-        /// <returns>Null if can't find an enum value.</returns>
+        /// <returns>If it can't find an enum value, returns null.</returns>
         [CanBeNull]
-        internal static Enum GetEnumValue(object target, string enumName)
+        internal static Enum GetEnumValue(this object target, string enumName)
         {
-            FieldInfo enumField = ReflectionUtility.GetField(target, enumName);
-            if (enumField != null && enumField.FieldType.IsSubclassOf(typeof(Enum)))
-                return (Enum) enumField.GetValue(target);
+            if (target.TryGetField(enumName, out FieldInfo enumField)
+                && enumField.FieldType.IsSubclassOf(typeof(Enum)))
+                return (Enum)enumField.GetValue(target);
 
-            PropertyInfo enumProperty = ReflectionUtility.GetProperty(target, enumName);
-            if (enumProperty != null && enumProperty.PropertyType.IsSubclassOf(typeof(Enum)))
-                return (Enum) enumProperty.GetValue(target);
+            if (target.TryGetProperty(enumName, out PropertyInfo enumProperty)
+                && enumProperty.PropertyType.IsSubclassOf(typeof(Enum)))
+                return (Enum)enumProperty.GetValue(target);
 
-            MethodInfo enumMethod = ReflectionUtility.GetMethod(target, enumName);
-            if (enumMethod != null && enumMethod.ReturnType.IsSubclassOf(typeof(Enum)))
-                return (Enum) enumMethod.Invoke(target, null);
+            if (target.TryGetMethod(enumName, out MethodInfo enumMethod)
+                && enumMethod.ReturnType.IsSubclassOf(typeof(Enum)))
+                return (Enum)enumMethod.Invoke(target, null);
 
             return null;
         }
 
-        internal static List<bool> GetConditionValues(object target, string[] conditions)
+        internal static List<bool> GetConditionValues(this object target, string[] conditions)
         {
             List<bool> conditionValues = new();
             foreach (string condition in conditions)
             {
-                FieldInfo conditionField = ReflectionUtility.GetField(target, condition);
-                if (conditionField != null &&
-                    conditionField.FieldType == typeof(bool))
-                    conditionValues.Add((bool) conditionField.GetValue(target));
+                if (target.TryGetField(condition, out FieldInfo conditionField)
+                    && conditionField.FieldType == typeof(bool))
+                    conditionValues.Add((bool)conditionField.GetValue(target));
 
-                PropertyInfo conditionProperty = ReflectionUtility.GetProperty(target, condition);
-                if (conditionProperty != null &&
-                    conditionProperty.PropertyType == typeof(bool))
-                    conditionValues.Add((bool) conditionProperty.GetValue(target));
+                if (target.TryGetProperty(condition, out PropertyInfo conditionProperty)
+                    && conditionProperty.PropertyType == typeof(bool))
+                    conditionValues.Add((bool)conditionProperty.GetValue(target));
 
-                MethodInfo conditionMethod = ReflectionUtility.GetMethod(target, condition);
-                if (conditionMethod != null &&
-                    conditionMethod.ReturnType == typeof(bool) &&
+                if (target.TryGetMethod(condition, out MethodInfo conditionMethod)
+                    && conditionMethod.ReturnType == typeof(bool) &&
                     conditionMethod.GetParameters().Length == 0)
-                    conditionValues.Add((bool) conditionMethod.Invoke(target, null));
+                    conditionValues.Add((bool)conditionMethod.Invoke(target, null));
             }
 
             return conditionValues;
         }
 
-        internal static bool GetConditionsFlag(List<bool> conditionValues, EConditionOperator conditionOperator,
-                                               bool invert)
+        internal static bool GetConditionsFlag(
+            this List<bool> conditionValues,
+            EConditionOperator conditionOperator,
+            bool invert
+        )
         {
             bool flag = conditionOperator == EConditionOperator.And
                 ? conditionValues.Aggregate(true, (current, value) => current && value)
@@ -221,10 +225,10 @@ namespace DreamBuilders.Editor
             return flag;
         }
 
-        public static Type GetPropertyType(SerializedProperty property) =>
+        public static Type GetPropertyType(this SerializedProperty property) =>
             GetTargetObjectOfProperty(property).GetType();
 
-        public static object GetTargetObjectOfProperty(SerializedProperty property)
+        public static object GetTargetObjectOfProperty(this SerializedProperty property)
         {
             if (property == null) return null;
 
@@ -238,7 +242,8 @@ namespace DreamBuilders.Editor
                 {
                     string elementName = element.Substring(0, element.IndexOf("["));
                     int index = Convert.ToInt32(element.Substring(element.IndexOf("[")).Replace("[", "")
-                                                       .Replace("]", ""));
+                        .Replace("]", ""));
+
                     obj = GetValue_Imp(obj, elementName, index);
                 }
                 else
@@ -248,7 +253,7 @@ namespace DreamBuilders.Editor
             return obj;
         }
 
-        public static object GetTargetObjectWithProperty(SerializedProperty property)
+        public static object GetTargetObjectWithProperty(this SerializedProperty property)
         {
             string path = property.propertyPath.Replace(".Array.data[", "[");
             object obj = property.serializedObject.targetObject;
@@ -261,7 +266,8 @@ namespace DreamBuilders.Editor
                 {
                     string elementName = element.Substring(0, element.IndexOf("["));
                     int index = Convert.ToInt32(element.Substring(element.IndexOf("[")).Replace("[", "")
-                                                       .Replace("]", ""));
+                        .Replace("]", ""));
+
                     obj = GetValue_Imp(obj, elementName, index);
                 }
                 else
@@ -271,7 +277,7 @@ namespace DreamBuilders.Editor
             return obj;
         }
 
-        private static object GetValue_Imp(object source, string name)
+        private static object GetValue_Imp(this object source, string name)
         {
             if (source == null) return null;
 
@@ -281,15 +287,15 @@ namespace DreamBuilders.Editor
             {
                 FieldInfo field =
                     type.GetField(name,
-                                  BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.Instance);
+                        BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.Instance);
 
                 if (field != null)
                     return field.GetValue(source);
 
                 PropertyInfo property =
                     type.GetProperty(name,
-                                     BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.Instance |
-                                     BindingFlags.IgnoreCase);
+                        BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.Instance |
+                        BindingFlags.IgnoreCase);
 
                 if (property != null)
                     return property.GetValue(source, null);
@@ -300,11 +306,12 @@ namespace DreamBuilders.Editor
             return null;
         }
 
-        private static object GetValue_Imp(object source, string name, int index)
+        private static object GetValue_Imp(this object source, string name, int index)
         {
             if (GetValue_Imp(source, name) is not IEnumerable enumerable) return null;
 
             IEnumerator enumerator = enumerable.GetEnumerator();
+
             for (int i = 0; i <= index; i++)
                 if (!enumerator.MoveNext())
                     return null;

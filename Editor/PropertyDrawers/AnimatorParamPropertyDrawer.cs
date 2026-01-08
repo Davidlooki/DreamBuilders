@@ -1,5 +1,7 @@
 using System.Collections.Generic;
 using System.Reflection;
+using DreamBuildersLibs;
+using JetBrains.Annotations;
 using UnityEditor;
 using UnityEditor.Animations;
 using UnityEngine;
@@ -11,9 +13,7 @@ namespace DreamBuilders.Editor
     {
         protected override float GetPropertyHeight_Internal(SerializedProperty property, GUIContent label) =>
             property.propertyType is SerializedPropertyType.Integer or SerializedPropertyType.String
-            && GetAnimatorController(
-                property,
-                PropertyUtility.GetAttribute<AnimatorParamAttribute>(property).AnimatorName) != null
+            && GetAnimatorController(property, property.GetAttribute<AnimatorParamAttribute>().AnimatorName) != null
                 ? GetPropertyHeight(property)
                 : GetPropertyHeight(property) + GetHelpBoxHeight();
 
@@ -21,8 +21,7 @@ namespace DreamBuilders.Editor
         {
             EditorGUI.BeginProperty(rect, label, property);
 
-            AnimatorParamAttribute animatorParamAttribute =
-                PropertyUtility.GetAttribute<AnimatorParamAttribute>(property);
+            AnimatorParamAttribute animatorParamAttribute = property.GetAttribute<AnimatorParamAttribute>();
 
             AnimatorController animatorController =
                 GetAnimatorController(property, animatorParamAttribute.AnimatorName);
@@ -135,13 +134,13 @@ namespace DreamBuilders.Editor
             return displayOptions;
         }
 
+        [CanBeNull]
         private static AnimatorController GetAnimatorController(SerializedProperty property, string animatorName)
         {
-            object target = PropertyUtility.GetTargetObjectWithProperty(property);
+            object target = property.GetTargetObjectWithProperty();
 
-            FieldInfo animatorFieldInfo = ReflectionUtility.GetField(target, animatorName);
-            if (animatorFieldInfo != null &&
-                animatorFieldInfo.FieldType == typeof(Animator))
+            if (target.TryGetField(animatorName,out FieldInfo animatorFieldInfo) 
+                && animatorFieldInfo.FieldType == typeof(Animator))
             {
                 Animator animator = animatorFieldInfo.GetValue(target) as Animator;
 
@@ -149,9 +148,8 @@ namespace DreamBuilders.Editor
                     return animator.runtimeAnimatorController as AnimatorController;
             }
 
-            PropertyInfo animatorPropertyInfo = ReflectionUtility.GetProperty(target, animatorName);
-            if (animatorPropertyInfo != null &&
-                animatorPropertyInfo.PropertyType == typeof(Animator))
+            if (target.TryGetProperty(animatorName,out PropertyInfo animatorPropertyInfo)
+                && animatorPropertyInfo.PropertyType == typeof(Animator))
             {
                 Animator animator = animatorPropertyInfo.GetValue(target) as Animator;
 
@@ -159,10 +157,10 @@ namespace DreamBuilders.Editor
                     return animator.runtimeAnimatorController as AnimatorController;
             }
 
-            MethodInfo animatorGetterMethodInfo = ReflectionUtility.GetMethod(target, animatorName);
-
-            if (animatorGetterMethodInfo == null || animatorGetterMethodInfo.ReturnType != typeof(Animator) ||
-                animatorGetterMethodInfo.GetParameters().Length != 0) return null;
+            if (target.TryGetMethod(animatorName,out MethodInfo animatorGetterMethodInfo)
+                || animatorGetterMethodInfo.ReturnType != typeof(Animator) 
+                || animatorGetterMethodInfo.GetParameters().Length != 0) 
+                return null;
 
             {
                 Animator animator = animatorGetterMethodInfo.Invoke(target, null) as Animator;

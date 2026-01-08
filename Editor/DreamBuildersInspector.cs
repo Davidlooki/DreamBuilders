@@ -3,6 +3,7 @@ using System.Linq;
 using System.Reflection;
 using UnityEditor;
 using UnityEngine;
+using DreamBuildersLibs;
 
 namespace DreamBuilders.Editor
 {
@@ -14,26 +15,18 @@ namespace DreamBuilders.Editor
         private IEnumerable<FieldInfo> _nonSerializedFields;
         private IEnumerable<PropertyInfo> _nativeProperties;
         private IEnumerable<MethodInfo> _methods;
-        private Dictionary<string, SavedBool> _foldouts = new();
+        private readonly Dictionary<string, SavedBool> _foldouts = new();
 
         protected virtual void OnEnable()
         {
-            _nonSerializedFields = ReflectionUtility.GetAllFields(
-                target,
-                f => f
-                    .GetCustomAttributes(typeof(ShowNonSerializedFieldAttribute),
-                        true).Length > 0);
+            _nonSerializedFields = target
+                .GetAllFields(f => f.GetCustomAttributes(typeof(ShowNonSerializedFieldAttribute), true).Length > 0);
 
-            _nativeProperties = ReflectionUtility.GetAllProperties(
-                target,
-                p => p
-                    .GetCustomAttributes(typeof(ShowNativePropertyAttribute),
-                        true).Length > 0);
+            _nativeProperties = target
+                .GetAllProperties(p => p.GetCustomAttributes(typeof(ShowNativePropertyAttribute), true).Length > 0);
 
-            _methods = ReflectionUtility.GetAllMethods(
-                target,
-                m => m.GetCustomAttributes(typeof(ButtonAttribute), true)
-                    .Length > 0);
+            _methods = target
+                .GetAllMethods(m => m.GetCustomAttributes(typeof(ButtonAttribute), true).Length > 0);
         }
 
         protected virtual void OnDisable() => ReorderableListPropertyDrawer.Instance.ClearCache();
@@ -43,7 +36,7 @@ namespace DreamBuilders.Editor
             GetSerializedProperties(ref _serializedProperties);
 
             bool dreamBuildersAttribute =
-                _serializedProperties.Any(p => PropertyUtility.GetAttribute<IPropertyAttribute>(p) != null);
+                _serializedProperties.Any(p => p.GetAttribute<IPropertyAttribute>() != null);
 
             if (!dreamBuildersAttribute)
                 DrawDefaultInspector();
@@ -178,21 +171,21 @@ namespace DreamBuilders.Editor
         private static IEnumerable<SerializedProperty> GetNonGroupedProperties(
             IEnumerable<SerializedProperty> properties
         ) =>
-            properties.Where(p => PropertyUtility.GetAttribute<IGroupPropertyAttribute>(p) == null);
+            properties.Where(p => p.GetAttribute<IGroupPropertyAttribute>() == null);
 
         private static IEnumerable<IGrouping<string, SerializedProperty>> GetGroupedProperties(
             IEnumerable<SerializedProperty> properties
         ) =>
             properties
-                .Where(p => PropertyUtility.GetAttribute<BoxGroupAttribute>(p) != null)
-                .GroupBy(p => PropertyUtility.GetAttribute<BoxGroupAttribute>(p).Name);
+                .Where(p => p.GetAttribute<BoxGroupAttribute>() != null)
+                .GroupBy(p => p.GetAttribute<BoxGroupAttribute>().Name);
 
         private static IEnumerable<IGrouping<string, SerializedProperty>> GetFoldoutProperties(
             IEnumerable<SerializedProperty> properties
         ) =>
             properties
-                .Where(p => PropertyUtility.GetAttribute<FoldoutAttribute>(p) != null)
-                .GroupBy(p => PropertyUtility.GetAttribute<FoldoutAttribute>(p).Name);
+                .Where(p => p.GetAttribute<FoldoutAttribute>() != null)
+                .GroupBy(p => p.GetAttribute<FoldoutAttribute>().Name);
 
         private static GUIStyle GetHeaderGUIStyle() =>
             new GUIStyle(EditorStyles.centeredGreyMiniLabel)
