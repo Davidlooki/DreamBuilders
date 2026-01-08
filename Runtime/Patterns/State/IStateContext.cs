@@ -1,4 +1,4 @@
-namespace DreamBuilders
+namespace DreamBuilders.StateMachine
 {
     public interface IStateContext
     {

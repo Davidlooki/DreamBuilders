@@ -1,6 +1,6 @@
-﻿namespace DreamBuilders.StateMachine
+namespace DreamBuilders.StateMachine
 {
-    public abstract class StateMachine : IStateContext
+    public abstract class MonoStateMachine : UnityEngine.MonoBehaviour, IStateContext
     {
         public IState PreviousState { get; protected set; }
         public IState CurrentState { get; protected set; }
@@ -29,10 +29,10 @@
         }
     }
 
-    public abstract class StateMachine<T> : IStateContext<T> where T : StateMachine<T>
+    public abstract class MonoStateMachine<T> : UnityEngine.MonoBehaviour, IStateContext<T> where T : MonoStateMachine<T>
     {
-        public IState<T> PreviousState { get; protected set; }
-        public IState<T> CurrentState { get; protected set; }
+        public IState<T> PreviousState { get; private set; }
+        public IState<T> CurrentState { get; private set; }
 
         private void FixedUpdate() => CurrentState?.FixedTick((T)this);
 
