@@ -1,4 +1,4 @@
-namespace DreamBuilders.StateMachine
+namespace DreamBuilders.Patterns.StateMachine
 {
     public interface IState
     {

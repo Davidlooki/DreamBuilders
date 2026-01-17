@@ -1,7 +1,7 @@
 ﻿using System.Linq;
 using UnityEngine;
 
-namespace DreamBuilders
+namespace DreamBuilders.Patterns.Singleton
 {
     /// <summary>
     /// Abstract class for making reload-proof singletons out of ScriptableObjects

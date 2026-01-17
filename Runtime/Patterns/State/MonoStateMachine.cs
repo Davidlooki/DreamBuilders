@@ -1,4 +1,4 @@
-namespace DreamBuilders.StateMachine
+namespace DreamBuilders.Patterns.StateMachine
 {
     public abstract class MonoStateMachine : UnityEngine.MonoBehaviour, IStateContext
     {

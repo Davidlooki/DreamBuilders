@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace DreamBuilders
+namespace DreamBuilders.Patterns.Singleton
 {
     [DisallowMultipleComponent]
     public abstract class Singleton<T> : MonoBehaviour where T : Component

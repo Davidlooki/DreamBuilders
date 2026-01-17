@@ -18,9 +18,8 @@ namespace DreamBuilders.AbilitySystem
 
         public void Execute(AbilityData ability, GameObject target)
         {
-            Object vvv;
             foreach (var effect in ability.Effects)
-                effect.Execute<T>(_owner, target);
+                effect.Execute(_owner, target);
         }
     }
 }

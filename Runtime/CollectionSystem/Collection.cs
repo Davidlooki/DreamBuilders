@@ -8,14 +8,13 @@ namespace DreamBuilders.CollectionSystem
     public abstract class Collection<T> : ScriptableObject, IList<T>, IReadOnlyList<T>,
         ICollection where T : ScriptableObject, ICollectionEntry
     {
-
         public T this[int index]
         {
             get => _entries[index];
             set => Replace(index, value);
         }
 
-        [SerializeField] protected List<T> _entries = new();
+        [SerializeField, Expandable] protected List<T> _entries = new();
 
         public int Count => _entries.Count;
         public bool IsReadOnly => false;
@@ -28,6 +27,19 @@ namespace DreamBuilders.CollectionSystem
             if (ContainsDuplicateId(out var duplicatedId, out var duplicatedIndexPair))
                 Debug.LogWarning($"{name} contains duplicated id {duplicatedId} at " +
                                  $"index {duplicatedIndexPair.Item1}" + $" and {duplicatedIndexPair.Item2}");
+
+            if (ContainNullEntries(out var entriesIndexes))
+                Debug.LogWarning($"Indexes {entriesIndexes} contained null entry.");
+        }
+
+        private bool ContainNullEntries(out string entriesIndexes)
+        {
+            entriesIndexes = string.Empty;
+            for (int i = 0; i < _entries.Count; i++)
+                if (!_entries[i])
+                    entriesIndexes += $"{i},";
+
+            return !string.IsNullOrWhiteSpace(entriesIndexes);
         }
 
         public void Add(T t) => _entries.Add(t);
@@ -140,8 +152,10 @@ namespace DreamBuilders.CollectionSystem
             {
                 T asset1 = _entries[i];
 
+                if (!asset1) continue;
+
                 for (var j = i + 1; j < _entries.Count; j++)
-                    if (asset1.Id == _entries[j].Id)
+                    if (_entries[j] && _entries[j].Id == asset1.Id)
                     {
                         duplicatedIndexPair = new Tuple<int, int>(i, j);
                         duplicatedId = asset1.Id;

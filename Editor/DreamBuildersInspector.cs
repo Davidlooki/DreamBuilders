@@ -191,5 +191,13 @@ namespace DreamBuilders.Editor
             new GUIStyle(EditorStyles.centeredGreyMiniLabel)
             { fontStyle = FontStyle.Bold,
               alignment = TextAnchor.UpperCenter };
+        
+        protected static void HorizontalLine()
+        {
+            DreamBuildersEditorGUI.HorizontalLine(
+                EditorGUILayout.GetControlRect(false),
+                HorizontalLineAttribute.DefaultHeight,
+                HorizontalLineAttribute.DefaultColor.GetColor());
+        }
     }
 }

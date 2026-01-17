@@ -31,8 +31,8 @@ namespace DreamBuilders.CollectionSystem
 #endif
 
 #if UNITY_EDITOR
-        protected void GenerateId() => Id = new System.Random(Name.GetHashCode()).Next();
-        protected void OnNameChanged()
+        protected virtual void GenerateId() => Id = new System.Random(Name.GetHashCode()).Next();
+        protected virtual void OnNameChanged()
         {
             if (string.IsNullOrEmpty(Name)) Name = name;
             if (!_notRandomId) GenerateId();

@@ -206,12 +206,6 @@ namespace DreamBuilders
         #endregion
 
         /// <summary>
-        /// Test for value that is near specified float (due to floating point imprecision).
-        /// </summary>
-        public static bool Approx(float x1, float x2) =>
-            Mathf.Approximately(x1, x2);
-
-        /// <summary>
         /// Circular Lerp is Like lerp but handles the wraparound from 0 to 360.
         /// </summary>
         /// <example>Useful when interpolating eulerAngles and the object crosses the 0/360 boundary.</example>
