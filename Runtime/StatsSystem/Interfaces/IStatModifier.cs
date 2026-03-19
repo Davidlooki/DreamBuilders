@@ -8,5 +8,6 @@ namespace DreamBuilders.StatsSystem
         ModifierType ModifierType { get; set; }
         Stat StatTarget { get; set; }
         float Value { get; set; }
+        float Duration { get; set; }
     }
 }

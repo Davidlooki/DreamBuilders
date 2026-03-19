@@ -235,5 +235,11 @@ namespace DreamBuilders
 
         public static double Sigmoid(double input, double coefficient = 1) =>
             1 / (1 + System.Math.Exp(-input * coefficient));
+        
+        public static int ClampMin(this int value, int min) =>
+            value < min ? min : value;
+        
+        public static float ClampMin(this float value, float min) =>
+            value < min ? min : value;
     }
 }

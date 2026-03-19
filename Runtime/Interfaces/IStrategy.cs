@@ -1,1 +1,4 @@
-public interface IStrategy { }
+namespace DreamBuilders
+{
+    public interface IStrategy { }
+}

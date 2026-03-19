@@ -1,4 +1,7 @@
-public interface ITageable
+namespace DreamBuilders
 {
-    System.Collections.Generic.List<string> Tags { get; }
+    public interface ITageable
+    {
+        System.Collections.Generic.List<string> Tags { get; }
+    }
 }

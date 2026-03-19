@@ -1,6 +1,9 @@
-﻿public interface IResource
+﻿namespace DreamBuilders
 {
-    float MinimumValue { get; set; }
-    float MaximumValue { get; set; }
-    float CurrentValue { get; set; }
+    public interface IResource
+    {
+        float MinimumValue { get; set; }
+        float MaximumValue { get; set; }
+        float CurrentValue { get; set; }
+    }
 }

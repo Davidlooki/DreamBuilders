@@ -12,13 +12,14 @@ namespace DreamBuilders.StatsSystem
         [field: SerializeField] public string ShortName { get; protected set; }
         [field: SerializeField] public float MaxValue { get; protected set; } = float.MaxValue;
         [field: SerializeField] public float MinValue { get; protected set; } = float.MinValue;
+        [field: SerializeField] public bool IsResource { get; protected set; }
 
         protected override void OnNameChanged()
         {
             base.OnNameChanged();
-            
+
             var clampNameLength = Mathf.Clamp(Name.Length, 0, 3);
-            
+
             if (string.IsNullOrEmpty(ShortName))
                 ShortName = Name[..Mathf.Clamp(Name.Length, 0, clampNameLength)].ToUpper();
         }

@@ -10,14 +10,14 @@ namespace DreamBuilders.StatsSystem
     /// For each Source Base Value, the corresponding Target will receive a bonus according to the defined modifier.
     /// </remarks>
     [CreateAssetMenu(fileName = "NewStatsBonus", menuName = "Stats Bonus", order = 0)]
-    public class StatsBonus : ScriptableObject
+    public class StatsBonus : ScriptableObject, IStatsDefinition
     {
         [field: SerializeField, Required] public StatList StatsList { get; protected set; }
 
         /// <summary>
         /// List containing all bonus modifiers from source stats to target stats.
         /// </summary>
-        public IReadOnlyList<StatModifier> BonusModifiers => _modifiers.AsReadOnly();
+        public IReadOnlyList<StatModifier> Modifiers => _modifiers.AsReadOnly();
 
         [SerializeField, HideInInspector] private List<StatModifier> _modifiers = new();
 

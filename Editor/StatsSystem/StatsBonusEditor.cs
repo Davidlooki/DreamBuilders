@@ -162,7 +162,7 @@ namespace DreamBuilders.Editor.StatsSystem
 
             var defaultSource = _statsBonus.StatsList.Count > 0 ? _statsBonus.StatsList[0] : null;
             var defaultTarget = _statsBonus.StatsList.Count > 1 ? _statsBonus.StatsList[1] : defaultSource;
-            var newModifier = new StatModifier(defaultSource, ModifierType.Flat, defaultTarget, 0f);
+            var newModifier = new StatModifier(defaultSource, ModifierType.Flat, defaultTarget, 0f, 0f);
 
             bonusModifiers.Add(newModifier);
 

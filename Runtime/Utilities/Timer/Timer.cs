@@ -10,8 +10,8 @@ namespace DreamBuilders.Utilities.Timer
 
         public float Progress => Time / _initialTime;
 
-        public readonly Action OnTimerStart = delegate { };
-        public readonly Action OnTimerStop = delegate { };
+        public Action OnTimerStart = delegate { };
+        public Action OnTimerStop = delegate { };
 
         protected Timer(float value)
         {

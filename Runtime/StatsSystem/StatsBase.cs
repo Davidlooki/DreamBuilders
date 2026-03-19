@@ -1,15 +1,15 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
+using DreamBuildersLibs;
 using UnityEngine;
 
 namespace DreamBuilders.StatsSystem
 {
     /// <summary>
     /// Base class for defining a set of stat modifiers that can be applied to a character or entity.
-    /// Use it only as reference to build specific stats configurations.
+    /// Use it only as a reference to build specific stats configurations.
     /// </summary>
     [CreateAssetMenu(fileName = "NewStatsBase", menuName = "Stats Base", order = 0)]
-    public class StatsBase : ScriptableObject
+    public class StatsBase : ScriptableObject, IStatsDefinition
     {
 #if UNITY_EDITOR
         [field: OnValueChanged(nameof(UpdateModifiers))]
@@ -39,18 +39,13 @@ namespace DreamBuilders.StatsSystem
             foreach (var stat in StatsList)
             {
                 if (!_modifiers.Exists(modifier => modifier.StatTarget == stat))
-                {
-                    _modifiers.Add(new StatModifier(
-                        source: stat,
-                        modifierType: ModifierType.Flat,
-                        statTarget: stat,
-                        value: 0f));
-                }
+                    _modifiers.Add(new StatModifier(stat, ModifierType.Flat, stat, 0f, 0f));
             }
 
             // Sort modifiers to match the order of stats in StatsList
-            _modifiers.Sort((a, b) =>
-                StatsList.IndexOf((Stat)a.StatTarget).CompareTo(StatsList.IndexOf((Stat)b.StatTarget)));
+            _modifiers.Sort((modifierA, modifierB) =>
+                StatsList.IndexOf(modifierA.StatTarget)
+                    .CompareTo(StatsList.IndexOf(modifierB.StatTarget)));
         }
 #endif
     }

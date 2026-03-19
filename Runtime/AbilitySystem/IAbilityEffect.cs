@@ -1,9 +1,10 @@
-﻿using UnityEngine;
+﻿using DreamBuilders.Interfaces;
 
 namespace DreamBuilders.AbilitySystem
 {
-    public interface IAbilityEffect
-    { 
-        void Execute<T>(T source, GameObject target) where T : MonoBehaviour, IAbilityOwner<T>;
+    public interface IAbilityEffect : IEffect
+    {
+        float Delay { get; }
+        void Apply(IAbilityOwner source, IAbilityTargetable target);
     }
 }

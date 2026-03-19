@@ -1,5 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
+using DreamBuilders;
 using DreamBuildersLibs;
 using JetBrains.Annotations;
 using UnityEngine;
@@ -7,30 +9,34 @@ using Object = UnityEngine.Object;
 
 namespace DreamBuilders.StatsSystem
 {
+    [Serializable]
     public class StatsComponent : MonoBehaviour
     {
-        [field: SerializeField, Required] public StatsBase StatsBase { get; protected set; }
-        [field: SerializeField] public StatsBonus StatsBonus { get; protected set; }
+        public IReadOnlyDictionary<IStat, StatInfo> StatsValues => _statsValues;
+        private readonly Dictionary<IStat, StatInfo> _statsValues = new();
 
-        public IReadOnlyDictionary<IStat, StatInfo> StatValues => _statValues;
-        private readonly Dictionary<IStat, StatInfo> _statValues = new();
-
-        protected void OnEnable()
+        public void Initialize(IStatModifier[] statsBase, IStatModifier[] statsBonus = null)
         {
+            if (statsBase.IsNullOrEmpty())
+                return;
+
+            _statsValues.Clear();
+
             // Create entries for StatInfo and referred Stat
-            StatsBase.StatsList.ForEachDo(stat => _statValues.Add(stat, new StatInfo(this, stat)));
+            statsBase.ForEachDo(modifier =>
+                _statsValues.Add(modifier.StatTarget, new StatInfo(this, modifier.StatTarget, statsBonus, statsBonus)));
 
             // Bind StatInfo to source Stat changes
-            foreach (var targetEntry in _statValues)
+            foreach (var targetEntry in _statsValues)
             {
-                foreach (var sourceEntry in StatsBase.StatsList)
+                foreach (var sourceEntry in statsBase)
                 {
-                    if (_statValues[targetEntry.Key].ModifiersList
-                        .All(x => x.Source != sourceEntry
+                    if (_statsValues[targetEntry.Key].ModifiersList
+                        .All(x => x.Source != sourceEntry.StatTarget
                                   //Avoid self-binding
                                   || x.Source == (Object)targetEntry.Key)) continue;
 
-                    targetEntry.Value.Bind(_statValues[sourceEntry]);
+                    targetEntry.Value.Bind(_statsValues[sourceEntry.StatTarget]);
                 }
             }
 
@@ -39,30 +45,41 @@ namespace DreamBuilders.StatsSystem
 
         public void AddModifiers(
             IEnumerable<IStatModifier> modifiers,
-            [CanBeNull] out IEnumerable<IStatModifier> failedModifiers
+            [CanBeNull] out IEnumerable<IStatModifier> failedModifiers,
+            float duration = 0f
         )
         {
             failedModifiers = modifiers.Where(x =>
                 //Remove null modifiers
                 x == null
                 //Remove modifiers where Stat Target is not in Stats List
-                || !_statValues.ContainsKey(x.StatTarget));
+                || !_statsValues.ContainsKey(x.StatTarget));
 
             modifiers.Except(failedModifiers)
-                .ForEachDo(x => _statValues[x.StatTarget].AddModifier(x, false));
-            
+                .ForEachDo(x =>
+                {
+                    _statsValues[x.StatTarget].AddModifier(x, false);
+
+                    if (x.Duration > 0f)
+                        this.Invoke(() => TryRemoveModifier(x), x.Duration);
+                });
+
             UpdateValues();
         }
 
         public bool TryAddModifier(IStatModifier statModifier)
         {
-            if (statModifier == null || !_statValues.TryGetValue(statModifier.StatTarget, out var statInfo)) return false;
+            if (statModifier == null || !_statsValues.TryGetValue(statModifier.StatTarget, out var statInfo))
+                return false;
 
             statInfo.AddModifier(statModifier);
 
+            if (statModifier.Duration > 0f)
+                this.Invoke(() => TryRemoveModifier(statModifier), statModifier.Duration);
+
             return true;
         }
-        
+
         public void RemoveModifiers(
             IEnumerable<IStatModifier> modifiers,
             [CanBeNull] out IEnumerable<IStatModifier> failedModifiers
@@ -72,36 +89,36 @@ namespace DreamBuilders.StatsSystem
                 //Remove null modifiers
                 x == null
                 //Remove modifiers where Stat Target is not in Stats List
-                || !_statValues.ContainsKey(x.StatTarget));
+                || !_statsValues.ContainsKey(x.StatTarget));
 
             modifiers.Except(failedModifiers)
-                .ForEachDo(x => _statValues[x.StatTarget].RemoveModifier(x, false));
-            
+                .ForEachDo(x => _statsValues[x.StatTarget].RemoveModifier(x, false));
+
             UpdateValues();
         }
 
         public bool TryRemoveModifier(IStatModifier statModifier)
         {
-            if (statModifier == null || !_statValues.TryGetValue(statModifier.StatTarget, out _)) return false;
+            if (statModifier == null || !_statsValues.TryGetValue(statModifier.StatTarget, out _)) return false;
 
-            _statValues[statModifier.StatTarget].RemoveModifier(statModifier);
+            _statsValues[statModifier.StatTarget].RemoveModifier(statModifier);
 
             return true;
         }
 
         public bool TryRemoveAllModifiersFromSource(
             [CanBeNull] Object source,
-            [CanBeNull] out IEnumerable<IStatModifier> removedStatModifiers
+            out IEnumerable<IStatModifier> removedStatModifiers
         )
         {
             removedStatModifiers = Enumerable.Empty<IStatModifier>();
 
-            foreach (var statInfo in _statValues.Values)
+            foreach (var statInfo in _statsValues.Values)
             {
-                _statValues[statInfo.Stat].RemoveAllModifiersFromSource(source, out var statRemovedModifiers, false);
+                _statsValues[statInfo.Stat].RemoveAllModifiersFromSource(source, out var statRemovedModifiers, false);
 
-                if (!statRemovedModifiers.IsNullOrEmpty())
-                    removedStatModifiers = removedStatModifiers.Concat(statRemovedModifiers);
+                removedStatModifiers =
+                    removedStatModifiers.Concat(statRemovedModifiers ?? Enumerable.Empty<IStatModifier>());
             }
 
             UpdateValues();
@@ -111,8 +128,8 @@ namespace DreamBuilders.StatsSystem
 
         public void UpdateValues()
         {
-            for (int i = 0; i < _statValues.Keys.Count; i++)
-                _statValues.Values.ElementAt(i).UpdateValue();
+            for (int i = 0; i < _statsValues.Keys.Count; i++)
+                _statsValues.Values.ElementAt(i).UpdateValue();
         }
     }
 }

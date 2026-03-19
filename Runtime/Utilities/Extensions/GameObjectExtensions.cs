@@ -20,13 +20,10 @@ namespace DreamBuilders
         /// <remarks>
         /// Be aware that a GameObject can hold multiple components of the same type.
         /// </remarks>  
-        public static T GetOrAdd<T>(this GameObject gameObject) where T : Component
-        {
-            T component = gameObject.GetComponent<T>();
-            if (!component) component = gameObject.AddComponent<T>();
-
-            return component;
-        }
+        public static T GetOrAdd<T>(this GameObject gameObject) where T : Component =>
+            !gameObject.TryGetComponent<T>(out var component)
+                ? gameObject.AddComponent<T>()
+                : component;
 
         /// <summary>
         /// Returns the object itself if it exists, null otherwise.

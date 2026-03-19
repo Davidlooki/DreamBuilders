@@ -9,5 +9,6 @@ namespace DreamBuilders.StatsSystem
         string ShortName { get; }
         float MaxValue { get; }
         float MinValue { get; }
+        bool IsResource { get; }
     }
 }

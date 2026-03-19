@@ -5,6 +5,13 @@
   "description": "Dream Builders library",
   "dependencies": {},
   "keywords": [],
+  "samples": [
+    {
+      "displayName": "Ability System",
+      "description": "How to use the Ability System",
+      "path": "Samples/SamplesAbilitySystem"
+    }
+  ],
   "author": {
     "name": "Davidlooki",
     "email": "davidlooki@hotmail.com",

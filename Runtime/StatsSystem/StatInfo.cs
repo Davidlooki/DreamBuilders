@@ -4,7 +4,6 @@ using System.Linq;
 using DreamBuildersLibs;
 using JetBrains.Annotations;
 using UnityEngine;
-using Object = UnityEngine.Object;
 
 namespace DreamBuilders.StatsSystem
 {
@@ -38,6 +37,15 @@ namespace DreamBuilders.StatsSystem
 
         protected float _baseValue = 0;
 
+        public float AsResourceValue
+        {
+            get => _asResourceValue;
+
+            set => _asResourceValue = Mathf.Clamp(value, Stat.MinValue, Stat.MaxValue);
+        }
+
+        private float _asResourceValue = 0;
+
         public IReadOnlyCollection<IStatModifier> ModifiersList => _modifiers.AsReadOnly();
         protected readonly List<IStatModifier> _modifiers = new();
 
@@ -46,17 +54,23 @@ namespace DreamBuilders.StatsSystem
 
         #endregion
 
-        public StatInfo(StatsComponent owner, IStat stat)
+        public StatInfo(
+            StatsComponent owner,
+            IStat stat,
+            IStatModifier[] statsBase,
+            [CanBeNull] IStatModifier[] statsBonus = null
+        )
         {
             _owner = owner;
             Stat = stat;
 
             // Combine IModifiers from StatsBase and StatsBonus
-            _owner.StatsBase.Modifiers
-                .Where(x => x.StatTarget == stat)
-                .Concat(_owner.StatsBonus.BonusModifiers
-                    .Where(x => x.StatTarget == stat))
+            statsBase.Where(x => x.StatTarget == (Stat)stat)
+                .Concat(statsBonus?.Where(x => x.StatTarget == (Stat)stat) ?? Array.Empty<IStatModifier>())
+                .Where(x => x.Value != 0)
                 .ForEachDo(x => _modifiers.Add(x));
+
+            AsResourceValue = Stat.IsResource ? stat.MaxValue : stat.MinValue;
         }
 
         /// <summary>
@@ -85,7 +99,7 @@ namespace DreamBuilders.StatsSystem
         }
 
         public void RemoveAllModifiersFromSource(
-            [CanBeNull] Object source,
+            [CanBeNull] UnityEngine.Object source,
             [CanBeNull] out IEnumerable<IStatModifier> removedIModifiers,
             bool updateValue = true
         )
@@ -114,21 +128,21 @@ namespace DreamBuilders.StatsSystem
 
             TotalValue += _modifiers
                 .Where(modifier => !IsBaseStat(modifier) && modifier.ModifierType == ModifierType.Additive)
-                .Sum(modifier => _owner.StatValues[(IStat)modifier.Source].BaseValue * modifier.Value);
+                .Sum(modifier => _owner.StatsValues[(IStat)modifier.Source].BaseValue * modifier.Value);
 
             TotalValue *= 1 + _modifiers
                 .Where(modifier => !IsBaseStat(modifier) && modifier.ModifierType == ModifierType.Multiplicative)
-                .Sum(modifier => _owner.StatValues[(IStat)modifier.Source].BaseValue * modifier.Value);
+                .Sum(modifier => _owner.StatsValues[(IStat)modifier.Source].BaseValue * modifier.Value);
 
             TotalValue = Mathf.Clamp(TotalValue, Stat.MinValue, Stat.MaxValue);
-            
+
             //Avoid stack overflow.
             if (!Mathf.Approximately(lastValue, TotalValue))
                 OnValueChanged?.Invoke();
 
             return;
 
-            bool IsBaseStat(IStatModifier stat) => stat.Source == Stat;
+            bool IsBaseStat(IStatModifier stat) => stat.Source == (Stat)Stat;
         }
 
         #endregion

@@ -1,10 +1,7 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using Codice.Client.BaseCommands.Import;
+﻿using System.Collections.Generic;
 using DreamBuilders.StatsSystem;
 using DreamBuildersLibs;
 using UnityEditor;
-using UnityEngine;
 
 namespace DreamBuilders.Editor.StatsSystem
 {
@@ -50,12 +47,12 @@ namespace DreamBuilders.Editor.StatsSystem
                 EditorGUILayout.BeginVertical("box");
 
                 // Show the stat target name as header
-                string statName = modifier.StatTarget != null ? modifier.StatTarget.Name : "Modifier";
+                string statName = modifier.StatTarget ? modifier.StatTarget.Name : "Modifier";
                 EditorGUILayout.LabelField(statName, EditorStyles.boldLabel);
 
                 // Source, ModifierType and StatTarget are readonly in the inspector
                 EditorGUI.BeginDisabledGroup(true);
-                EditorGUILayout.ObjectField("Stat Target", modifier.StatTarget, typeof(Stat), false);
+                EditorGUILayout.ObjectField("Stat Target", modifier.StatTarget, typeof(IStat), false);
                 EditorGUILayout.EnumPopup("Type", modifier.ModifierType);
                 EditorGUI.EndDisabledGroup();
 

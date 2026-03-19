@@ -1,4 +1,7 @@
-﻿public interface IIdentity
+﻿namespace DreamBuilders
 {
-    int Id { get; }
+    public interface IIdentity
+    {
+        int Id { get; }
+    }
 }

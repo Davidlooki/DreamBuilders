@@ -1,4 +1,7 @@
-﻿public interface INameable
+﻿namespace DreamBuilders
 {
-    string Name { get; }
+    public interface INameable
+    {
+        string Name { get; }
+    }
 }
